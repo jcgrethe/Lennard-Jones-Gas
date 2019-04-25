@@ -1,10 +1,10 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.LennardJones;
 
 /**
  * Hello world!
  *
  */
-public class LennardJones
+public class LennardJonesSimulation
 {
     public static void main( String[] args )
     {
