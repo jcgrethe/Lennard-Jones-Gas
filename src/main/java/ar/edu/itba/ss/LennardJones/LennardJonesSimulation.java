@@ -72,7 +72,7 @@ public class LennardJonesSimulation {
     private Particle move(Particle p, List<Particle> neighbours, Double time){
         neighbours = neighbours.stream().filter(n -> !isWallBetween(p, n)).collect(Collectors.toList());
         addWall(p,neighbours);
-        return currentAlgotithm.moveParticle(p, time, lennardJonesForceCalcuator.getForce(p, neighbours));
+        return currentAlgotithm.moveParticle(p, time, neighbours);
 
     }
 

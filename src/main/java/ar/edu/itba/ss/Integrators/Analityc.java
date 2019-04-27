@@ -1,9 +1,11 @@
 package ar.edu.itba.ss.Integrators;
 
+import ar.edu.itba.ss.LennardJones.LennardJonesForce;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
 
 import java.awt.geom.Point2D;
+import java.util.List;
 
 public class Analityc extends Integrator {
 
@@ -19,12 +21,12 @@ public class Analityc extends Integrator {
     private final Double initialX = 1.0;          // In m
     private final Double initialV = -A*y/(2*M);   // In m/s
 
-    public Analityc(Double dt) {
-        super(dt);
+    public Analityc(Double dt, LennardJonesForce lennardJonesForce) {
+        super(dt, lennardJonesForce);
     }
 
     @Override
-    public Particle moveParticle(Particle particle, Double time, Point2D force) {
+    public Particle moveParticle(Particle particle, Double time, List<Particle> neighbors) {
         return null;
     }
 

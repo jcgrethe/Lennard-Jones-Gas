@@ -39,6 +39,10 @@ public class Particle {
         this.mass = mass;
         this.vModule = Math.hypot(vX, vY);
         this.vAngle = Math.atan(vY/vX);
+        this.aX = 0;
+        this.aY = 0;
+        this.aModule = 0;
+        this.aAngle = 0;
     }
 
     public Particle(double radius, double mass, double x, double y, double vX, double vY, double aX, double aY) {
@@ -70,6 +74,10 @@ public class Particle {
         this.mass = Double.POSITIVE_INFINITY;
         this.vModule = Math.hypot(vX, vY);
         this.vAngle = Math.atan(vY/vX);
+        this.aX = 0;
+        this.aY = 0;
+        this.aModule = 0;
+        this.aAngle = 0;
     }
 
     public Long getId() {
