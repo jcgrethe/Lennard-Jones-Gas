@@ -1,6 +1,8 @@
 package ar.edu.itba.ss.Algorithms;
+import ar.edu.itba.ss.models.Grid;
 import javafx.util.Pair;
-
+import ar.edu.itba.ss.models.Particle;
+import ar.edu.itba.ss.models.Cell;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +18,7 @@ public class NeighborDetection {
      * @param contornCondition      True if the contorn condition is on.
      * @return  A Map with a {@link List} of {@link Particle}s for each Particle.
      */
-    protected static Map<Particle, List<Particle>> getNeighbors(Grid grid, HashSet<Pair<Integer, Integer>> usedCells, Double interactionRadio, Boolean contornCondition, int time){
+    public static Map<Particle, List<Particle>> getNeighbors(Grid grid, HashSet<Pair<Integer, Integer>> usedCells, Double interactionRadio, Boolean contornCondition, int time){
         Map<Particle, List<Particle>> result = new HashMap<>();
         // Foreach cell with particles
         usedCells.forEach(pair -> {
