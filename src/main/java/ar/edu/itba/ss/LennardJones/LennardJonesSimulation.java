@@ -27,20 +27,27 @@ public class LennardJonesSimulation
     public void simulate(Input input, double dt){
 
         double time = 0;
-        int iteration = 1;
+        int iteration = 0;
         List<Particle> particles = input.getParticles();
 
         while (true) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
-            grid.setParticles(input.getParticles());
+            grid.setParticles(particles);
+            Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
 
-            Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false,iteration);
+            for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
+                move(particle.getKey(),particle.getValue());
+            }
 
             //particles = nextParticles(neighbours);
-
+            //TODO: generate output
             time += dt;
             iteration++;
         }
+
+    }
+
+    public void move(Particle p, List<Particle> neighbors){
 
     }
 
