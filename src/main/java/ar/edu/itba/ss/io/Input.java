@@ -95,4 +95,60 @@ public class Input {
     public double getInteractionRadio() {
         return interactionRadio;
     }
+
+    public Long getParticlesQuantity() {
+        return ParticlesQuantity;
+    }
+
+    public static Double getDefaultVelocity() {
+        return defaultVelocity;
+    }
+
+    public static Double getTime() {
+        return time;
+    }
+
+    public static Double getDt() {
+        return dt;
+    }
+
+    public static Double getParticleRadio() {
+        return ParticleRadio;
+    }
+
+    public static Double getParticleMass() {
+        return ParticleMass;
+    }
+
+    public Double getRm() {
+        return Rm;
+    }
+
+    public Double getEpsilon() {
+        return epsilon;
+    }
+
+    public Double getM() {
+        return m;
+    }
+
+    public Double getR() {
+        return r;
+    }
+
+    public Integer getBoxWidth() {
+        return boxWidth;
+    }
+
+    public Integer getBoxHeight() {
+        return boxHeight;
+    }
+
+    public Integer getMiddleBoxWidth() {
+        return middleBoxWidth;
+    }
+
+    public Integer getOrificeLength() {
+        return orificeLength;
+    }
 }

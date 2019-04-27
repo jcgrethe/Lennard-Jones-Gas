@@ -14,19 +14,9 @@ import java.util.List;
  */
 public class OsciladorAmortiguadoSimulation {
 
-    private static Integer A = 1;       // TODO: Put real value
 
-    // Default Paramenters
-    private static Double M = 70.0;     // In Kilogrames
-    private static Integer K = 10000;   // In N/m
-    private static Double y = 100.0;    // In kg/s
-    private static Double Tf = 5.0;     // In s
 
-    // Initial Conditions
-    private static Double initialX = 1.0;          // In m
-    private static Double initialV = -A*y/(2*M);   // In m/s
-
-    private static Double endTime = 10.0;          // In s
+    private static Double endTime = 5.0; // In s
 
     public static void main( String[] args )
     {
@@ -38,22 +28,22 @@ public class OsciladorAmortiguadoSimulation {
         double[] beenmanError = new double[diferentials.size()];
         double[] gearPredictorError = new double[diferentials.size()];
         double[] verletError = new double[diferentials.size()];
-        double[][] analitycPositions = null;
-        double[][] beenmanPositions = null;
-        double[][] gearPredictorPositions = null;
-        double[][] verletPositions = null;
+        double[][] analitycPositions = new double[diferentials.size()][];
+        double[][] beenmanPositions = new double[diferentials.size()][];
+        double[][] gearPredictorPositions = new double[diferentials.size()][];
+        double[][] verletPositions = new double[diferentials.size()][];
 
         for (double diferential_t : diferentials){
             int index = diferentials.indexOf(diferential_t);
 
             analitycPositions[index] = oscillation(new Analityc(), diferential_t, endTime);
-            beenmanPositions[index] = oscillation(new Beeman(), diferential_t, endTime);
-            gearPredictorPositions[index] = oscillation(new GearPredictor(), diferential_t, endTime);
-            verletPositions[index] = oscillation(new Verlet(), diferential_t, endTime);
+//            beenmanPositions[index] = oscillation(new Beeman(), diferential_t, endTime);
+//            gearPredictorPositions[index] = oscillation(new GearPredictor(), diferential_t, endTime);
+//            verletPositions[index] = oscillation(new Verlet(), diferential_t, endTime);
 
-            beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
-            gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
-            verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
+//            beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
+//            gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
+//            verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
         }
         Output.printOscillationsResults(analitycPositions,beenmanPositions,gearPredictorPositions,verletPositions,beenmanError,gearPredictorError,verletError,diferentials);
     }
@@ -67,16 +57,20 @@ public class OsciladorAmortiguadoSimulation {
     }
 
     private static double[] oscillation(Algorithm algorithm, double dt, double endtime){
-        double[] positions = new double[(int) (endtime/dt)];
+        int bins = (int) (endtime/dt);
+        double[] positions = new double[bins];
 
-        if (algorithm instanceof Analityc){
-
-        }else if (algorithm instanceof Beeman){
-
-        }else if (algorithm instanceof GearPredictor){
-
-        }else if (algorithm instanceof Verlet){
-
+        for (int t=0 ; t < bins ; t++){
+            positions[t] = algorithm.nextPosition(dt*t);
+//            if (algorithm instanceof Analityc){
+//                positions[t] = algorithm.nextPosition(dt*t);
+//            }else if (algorithm instanceof Beeman){
+//
+//            }else if (algorithm instanceof GearPredictor){
+//
+//            }else if (algorithm instanceof Verlet){
+//
+//            }
         }
 
         return positions;

@@ -113,7 +113,7 @@ public class NeighborDetection {
     private static Double getDistance(Particle p1, Particle p2, boolean contorn, int size){
         double y = Math.abs(p2.getY() - p1.getY());
         double x = Math.abs(p2.getX() - p1.getX());
-        double h = Math.hypot(y, x); 
+        double h = Math.hypot(y, x);
         if (contorn){
             double xc = Math.abs(p1.getX() - p2.getX());
             xc = Math.min(xc, size - xc);

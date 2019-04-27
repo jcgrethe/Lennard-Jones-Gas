@@ -1,8 +1,5 @@
 package ar.edu.itba.ss.models;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class Particle {
     private static Long serial_id = Long.valueOf(0);
 
@@ -28,16 +25,17 @@ public class Particle {
         this.vAngle = Math.atan(vY/vX);
     }
 
-    public void updateMotion(Double vX, Double vY){
-        this.vX = vX;
-        this.vY = vY;
+    //wall
+    public Particle(long id,double x, double y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.vX = 0;
+        this.vY = 0;
+        this.radius = 0;
+        this.mass = Double.POSITIVE_INFINITY;
         this.vModule = Math.hypot(vX, vY);
         this.vAngle = Math.atan(vY/vX);
-    }
-
-    public void evolve(Double time){
-        this.x += time * this.vX;
-        this.y += time * this.vY;
     }
 
     public Long getId() {

@@ -4,27 +4,38 @@ import ar.edu.itba.ss.Algorithms.*;
 import ar.edu.itba.ss.io.Input;
 import ar.edu.itba.ss.models.Grid;
 import ar.edu.itba.ss.models.Particle;
+import ar.edu.itba.ss.models.Wall;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Hello world!
  *
  */
-public class LennardJonesSimulation
-{
-    public LennardJonesSimulation()
+public class LennardJonesSimulation {
+
+    Input input;
+    double gapStart;
+    double gapEnd;
+    Algorithm currentAlgotithm;
+    public LennardJonesSimulation(double dt, Algorithm currentAlgotithm)
     {
         Particle particle = new Particle(0,0,0,0,0,0);
+        this.currentAlgotithm = currentAlgotithm;
         Algorithm verletAlgorithm = new Verlet();
         Algorithm BeemanAlgorithm = new Beeman();
         Algorithm GearPredictorAlgorithm = new GearPredictor();
-        Input input = new Input(Long.valueOf(100),0.1);
-        this.simulate(input,0.1);
+        this.input = new Input(Long.valueOf(100),0.1);
+        this.simulate(dt);
+        gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
+        gapEnd = input.getBoxHeight()- gapStart;
     }
 
-    public void simulate(Input input, double dt){
+
+    public void simulate(double dt){
 
         double time = 0;
         int iteration = 0;
@@ -35,23 +46,99 @@ public class LennardJonesSimulation
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
 
+            List<Particle> auxParticle = new LinkedList<>();
             for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
-                move(particle.getKey(),particle.getValue());
+               auxParticle.add(move(particle.getKey(),particle.getValue()));
             }
 
             //particles = nextParticles(neighbours);
             //TODO: generate output
             time += dt;
             iteration++;
+            particles=auxParticle;
         }
 
     }
 
-    public void move(Particle p, List<Particle> neighbors){
+    private Particle move(Particle p, List<Particle> neighbours){
+        neighbours = neighbours.stream().filter(n -> !isWallBetween(p, n)).collect(Collectors.toList());
+        addWall(p,neighbours);
+        return currentAlgotithm.moveParticle(p,neighbours);
+
+    }
+
+
+    private void addWall(Particle p, List<Particle> neighbours ){
+        int up = input.getBoxHeight();
+        int middle = input.getMiddleBoxWidth();
+        int right = input.getBoxWidth();
+        double ir = input.getInteractionRadio();
+        //TOP
+        if(up - p.getY() <= ir)
+            neighbours.add(new Particle(Wall.typeOfWall.TOP.getVal(),p.getX(),up));
+        //BOTTOM
+        if(p.getY()<=ir)
+            neighbours.add(new Particle(Wall.typeOfWall.BOTTOM.getVal(),p.getX(),0));
+
+
+
+        double distancesToMiddle = input.getMiddleBoxWidth() - p.getX();
+        if(distancesToMiddle>=0){
+            //LEFT OF THE MIDDLE WALL
+            if ( distancesToMiddle <= ir && notGap(p) )
+                neighbours.add(new Particle(Wall.typeOfWall.MIDDLE.getVal(),input.getMiddleBoxWidth(),p.getY()));
+            else if(p.getX()<=ir)
+                neighbours.add(new Particle(Wall.typeOfWall.LEFT.getVal(),0,p.getY()));
+        }else {
+            //RIGHT OF THE MIDDLE WALL
+            distancesToMiddle = Math.abs(distancesToMiddle);
+            if ( distancesToMiddle <= ir && notGap(p) )
+                neighbours.add(new Particle(Wall.typeOfWall.MIDDLE.getVal(),input.getMiddleBoxWidth(),p.getY()));
+            else if ( right - p.getX() <= ir )
+                neighbours.add(new Particle(Wall.typeOfWall.RIGHT.getVal(),input.getBoxWidth(),p.getY()));
+        }
+
+        if(!notGap(p)){
+            Particle pGapStart = new Particle(Wall.typeOfWall.GAPSTART.getVal(),input.getMiddleBoxWidth(),gapStart);
+            Particle pGapEnd = new Particle(Wall.typeOfWall.GAPEND.getVal(),input.getMiddleBoxWidth(),gapEnd);
+            if(getDistances(p,pGapStart)<=ir)
+                neighbours.add(pGapStart);
+            if (getDistances(p,pGapEnd)<= ir)
+                neighbours.add(pGapEnd);
+        }
 
     }
 
 
 
+    private boolean isWallBetween(Particle p1, Particle p2) {
+        double x1= p1.getX();
+        double y1= p1.getY();
+        double x2= p2.getX();
+        double y2= p2.getY();
+
+        if (x1 == x2) {
+            return false;
+        }
+
+        final double m = (y2 - y1) / (x2 - x1);
+        final double b = y1 - m * x1;
+        final double xp = input.getBoxWidth() / 2;
+        final double yp = m * xp + b;
+
+        return yp > gapStart && yp < gapEnd &&
+                ((x1 > input.getBoxWidth() / 2 && x2 < input.getBoxWidth()/ 2) ||
+                        (x1 < input.getBoxWidth() / 2 && x2 > input.getBoxWidth() / 2));
+    }
+
+    private boolean notGap(Particle p){
+        return (p.getY() <= gapStart || p.getY() >= gapEnd);
+    }
+
+    private double getDistances(Particle p1, Particle p2){
+        double y = Math.abs(p2.getY() - p1.getY());
+        double x = Math.abs(p2.getX() - p1.getX());
+        return Math.hypot(y, x);
+    }
 
 }
