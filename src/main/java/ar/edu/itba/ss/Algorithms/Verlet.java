@@ -9,4 +9,9 @@ public class Verlet extends Algorithm{
     public void moveParticle(Particle particle, List<Particle> neighbors) {
 
     }
+
+    @Override
+    public Double nextPosition(Double t) {
+        return null;
+    }
 }
