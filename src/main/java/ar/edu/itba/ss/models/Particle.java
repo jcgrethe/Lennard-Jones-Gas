@@ -6,25 +6,59 @@ public class Particle {
     private final Long id;
     private final double radius;
     private final double mass;
-    State previousState;
-    State currentState;
 
+    /**
+     * Position
+     */
+    private double x;
+    private double y;
+
+    /**
+     * Velocity
+     */
+    private double vX;
+    private double vY;
+    private double vAngle;
+    private double vModule;
+
+    /**
+     * Acceleration
+     */
+    private double aX;
+    private double aY;
+    private double aAngle;
+    private double aModule;
 
     public Particle(double x, double y, double vX, double vY, double radius, double mass) {
         this.id = serial_id++;
-        previousState = new State(x, y, vX, vY, 0, 0);
+        this.x = x;
+        this.y = y;
+        this.vX = vX;
+        this.vY = vY;
         this.radius = radius;
         this.mass = mass;
-        currentState=previousState;
+        this.vModule = Math.hypot(vX, vY);
+        this.vAngle = Math.atan(vY/vX);
+        this.aX = 0;
+        this.aY = 0;
+        this.aModule = 0;
+        this.aAngle = 0;
     }
 
     public Particle(double radius, double mass, double x, double y, double vX, double vY, double aX, double aY) {
         this.id = serial_id++;
         this.radius = radius;
         this.mass = mass;
-        previousState = new State(x, y, vX, vY, aX, aY);
-        currentState=previousState;
-
+        this.x = x;
+        this.y = y;
+        this.vX = vX;
+        this.vY = vY;
+        this.aX = aX;
+        this.aY = aY;
+        this.vModule = Math.hypot(vX, vY);
+        this.vAngle = Math.atan(vY/vX);
+        this.aModule = Math.hypot(aX, aY);
+        this.aAngle = Math.atan(aY/aX);
     }
 
     /**
@@ -32,10 +66,18 @@ public class Particle {
      */
     public Particle(long id,double x, double y) {
         this.id = id;
-        previousState = new State(x, y, 0, 0, 0, 0);
+        this.x = x;
+        this.y = y;
+        this.vX = 0;
+        this.vY = 0;
         this.radius = 0;
         this.mass = Double.POSITIVE_INFINITY;
-        currentState=previousState;
+        this.vModule = Math.hypot(vX, vY);
+        this.vAngle = Math.atan(vY/vX);
+        this.aX = 0;
+        this.aY = 0;
+        this.aModule = 0;
+        this.aAngle = 0;
     }
 
     public Long getId() {
@@ -43,27 +85,27 @@ public class Particle {
     }
 
     public double getX() {
-        return previousState.getX();
+        return x;
     }
 
     public double getY() {
-        return previousState.getY();
+        return y;
     }
 
     public double getvX() {
-        return previousState.getvX();
+        return vX;
     }
 
     public double getvY() {
-        return previousState.getvY();
+        return vY;
     }
 
     public double getvAngle() {
-        return previousState.getvAngle();
+        return vAngle;
     }
 
     public double getvModule() {
-        return previousState.getvModule();
+        return vModule;
     }
 
     public double getRadius() {
@@ -75,35 +117,19 @@ public class Particle {
     }
 
     public double getaX() {
-        return previousState.getaX();
+        return aX;
     }
 
     public double getaY() {
-        return previousState.getaY();
+        return aY;
     }
 
     public double getaAngle() {
-        return previousState.getaAngle();
+        return aAngle;
     }
 
     public double getaModule() {
-        return previousState.getaModule();
-    }
-
-    public State getPreviousState() {
-        return previousState;
-    }
-
-    public void setPreviousState(State previousState) {
-        this.previousState = previousState;
-    }
-
-    public State getCurrentState() {
-        return currentState;
-    }
-
-    public void setCurrentState(State currentState) {
-        this.currentState = currentState;
+        return aModule;
     }
 
     @Override
@@ -119,123 +145,6 @@ public class Particle {
     @Override
     public int hashCode() {
         return id.hashCode();
-    }
-
-    class State{
-        /**
-         * Position
-         */
-        private double x;
-        private double y;
-
-        /**
-         * Velocity
-         */
-        private double vX;
-        private double vY;
-        private double vAngle;
-        private double vModule;
-
-        /**
-         * Acceleration
-         */
-        private double aX;
-        private double aY;
-        private double aAngle;
-        private double aModule;
-
-        State(double x, double y, double vX, double vY, double aX, double aY) {
-            this.x = x;
-            this.y = y;
-            this.vX = vX;
-            this.vY = vY;
-            this.aX = aX;
-            this.aY = aY;
-            this.vModule = Math.hypot(vX, vY);
-            this.vAngle = Math.atan(vY/vX);
-            this.aModule = Math.hypot(aX, aY);
-            this.aAngle = Math.atan(aY/aX);
-        }
-
-        public double getX() {
-            return x;
-        }
-
-        public void setX(double x) {
-            this.x = x;
-        }
-
-        public double getY() {
-            return y;
-        }
-
-        public void setY(double y) {
-            this.y = y;
-        }
-
-        public double getvX() {
-            return vX;
-        }
-
-        public void setvX(double vX) {
-            this.vX = vX;
-        }
-
-        public double getvY() {
-            return vY;
-        }
-
-        public void setvY(double vY) {
-            this.vY = vY;
-        }
-
-        public double getvAngle() {
-            return vAngle;
-        }
-
-        public void setvAngle(double vAngle) {
-            this.vAngle = vAngle;
-        }
-
-        public double getvModule() {
-            return vModule;
-        }
-
-        public void setvModule(double vModule) {
-            this.vModule = vModule;
-        }
-
-        public double getaX() {
-            return aX;
-        }
-
-        public void setaX(double aX) {
-            this.aX = aX;
-        }
-
-        public double getaY() {
-            return aY;
-        }
-
-        public void setaY(double aY) {
-            this.aY = aY;
-        }
-
-        public double getaAngle() {
-            return aAngle;
-        }
-
-        public void setaAngle(double aAngle) {
-            this.aAngle = aAngle;
-        }
-
-        public double getaModule() {
-            return aModule;
-        }
-
-        public void setaModule(double aModule) {
-            this.aModule = aModule;
-        }
     }
 
 }

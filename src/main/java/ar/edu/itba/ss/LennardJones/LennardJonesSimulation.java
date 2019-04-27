@@ -55,24 +55,25 @@ public class LennardJonesSimulation {
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
 
+            List<Particle> auxParticle = new LinkedList<>();
             for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
-               move(particle.getKey(),particle.getValue(), time);
+               auxParticle.add(move(particle.getKey(),particle.getValue(), time));
             }
 
             //particles = nextParticles(neighbours);
             //TODO: generate output
-            input.getParticles().stream().parallel().forEach(particle -> particle.setPreviousState(particle.getCurrentState()));
             time += dt;
             iteration++;
-
+            particles=auxParticle;
         }
 
     }
 
-    private void move(Particle p, List<Particle> neighbours, Double time){
+    private Particle move(Particle p, List<Particle> neighbours, Double time){
         neighbours = neighbours.stream().filter(n -> !isWallBetween(p, n)).collect(Collectors.toList());
         addWall(p,neighbours);
-        currentAlgotithm.moveParticle(p, time, neighbours);
+        return currentAlgotithm.moveParticle(p, time, neighbours);
+
     }
 
 
