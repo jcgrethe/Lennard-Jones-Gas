@@ -13,11 +13,81 @@ public class Output {
     private final static String STATIC_FILENAME = "sample_input_static.txt";
     private final static String DINAMIC_FILENAME = "sample_input_dinamic.txt";
     private final static String STATISTICS_FILENAME = "statistics_collisions_per_unit_of_time.csv";
+    private final static String OSCILLATION_RESULTS_FILENAME = "oscillation_results.csv";
     public final static String STATISTICS_V_0_FILENAME = "statistics_v_0.csv";
     public final static String STATISTICS_V_F_FILENAME = "statistics_v_f.csv";
 
     private static BufferedWriter simulationBufferedWriter;
 
+    public static void printOscillationsResults(double[][] analitycPositions,
+                                                double[][] beemanPositions,
+                                                double[][] GearPredictorPositions,
+                                                double[][] verletPositions,
+                                                double[] beenmanError,
+                                                double[] gearPredictorError,
+                                                double[] verletError,
+                                                List<Double> dts
+                                                ){
+        System.out.println("Printing...");
+        try{
+            FileWriter ofw = new FileWriter(OSCILLATION_RESULTS_FILENAME);
+            BufferedWriter obufferedw = new BufferedWriter(ofw);
+            obufferedw.write(
+                    "ECM\\Algoritmo,Beeman,GP,Verlet"
+            );
+            obufferedw.newLine();
+            for (int i=0 ; i < dts.size() ; i++) {
+                obufferedw.write(
+                        dts.get(i) + "," +
+                        beenmanError[i] + "," +
+                        gearPredictorError[i] + "," +
+                        verletError[i]
+                        );
+                obufferedw.newLine();
+            }
+            for (int i=0 ; i < dts.size() ; i++){
+                try {
+                    obufferedw.write(
+                            dts.get(i).toString()
+                    );
+                    obufferedw.newLine();
+                    obufferedw.write(
+                            "Analytic,Beeman,Gear Predictor,Verlet"
+                    );
+                    obufferedw.newLine();
+                    for (int p=0 ; p < analitycPositions[i].length ; p++){
+                        obufferedw.write(
+                                analitycPositions[i][p] + "," +
+                                beemanPositions[i][p] + "," +
+                                GearPredictorPositions[i][p] + "," +
+                                verletPositions[i][p]
+                        );
+                        obufferedw.newLine();
+                    }
+                }catch (IOException e) {
+                }
+            }
+        }catch (IOException e) {
+        }
+
+//
+//            statisticsBuffererWriter.newLine();
+//            collisionsPerUnitOfTime.entrySet().forEach(entry -> {
+//                try{
+//                    statisticsBuffererWriter.write(
+//                            entry.getKey() + "," + entry.getValue()
+//                    );
+//                    statisticsBuffererWriter.newLine();
+//                }catch (IOException e){
+//                    System.out.println(e);
+//                }
+//            });
+//            statisticsBuffererWriter.flush();
+//
+//        }catch(IOException e){
+//            System.out.println(e);
+//        }
+    }
 
     public static void printToFile(List<Particle> particles) throws IOException {
         simulationBufferedWriter.write(String.valueOf(particles.size()));
