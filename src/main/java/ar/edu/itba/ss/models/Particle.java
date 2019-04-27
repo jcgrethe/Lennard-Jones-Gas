@@ -1,5 +1,8 @@
 package ar.edu.itba.ss.models;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Particle {
     private static Long serial_id = Long.valueOf(0);
 
@@ -12,6 +15,7 @@ public class Particle {
     private double vModule;
     private final double radius;
     private final double mass;
+    private List<State> states;
 
     public Particle(double x, double y, double vX, double vY, double radius, double mass) {
         this.id = serial_id++;
@@ -23,6 +27,7 @@ public class Particle {
         this.mass = mass;
         this.vModule = Math.hypot(vX, vY);
         this.vAngle = Math.atan(vY/vX);
+        states = new LinkedList<>();
     }
 
     public void updateMotion(Double vX, Double vY){
@@ -87,4 +92,53 @@ public class Particle {
     public int hashCode() {
         return id.hashCode();
     }
+
+    public List<State> getStates() {
+        return states;
+    }
+
+    public class State{
+        private final Double x;
+        private final Double y;
+
+        private final double vx;
+        private final double vy;
+        private final Double speedModule;
+        private Double speedAngle;
+
+
+        public State(Double x, Double y, double speedModule, double speedAngle) {
+            this.x = x;
+            this.y = y;
+            this.speedAngle = speedAngle;
+            this.speedModule = speedModule;
+            this.vx = Math.cos(speedAngle) * speedModule;
+            this.vy = Math.sin(speedAngle) * speedModule;
+        }
+
+        public Double getX() {
+            return x;
+        }
+
+        public Double getY() {
+            return y;
+        }
+
+        public Double getSpeedModule() {
+            return speedModule;
+        }
+
+        public Double getSpeedAngle() {
+            return speedAngle;
+        }
+
+        public double getVx() {
+            return vx;
+        }
+
+        public double getVy() {
+            return vy;
+        }
+    }
+
 }
