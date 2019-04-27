@@ -1,8 +1,7 @@
 package ar.edu.itba.ss.OsciladorAmortiguado;
 
-import ar.edu.itba.ss.Algorithms.*;
+import ar.edu.itba.ss.Integrators.*;
 import ar.edu.itba.ss.io.Output;
-import ar.edu.itba.ss.models.Particle;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -36,7 +35,7 @@ public class OsciladorAmortiguadoSimulation {
         for (double diferential_t : diferentials){
             int index = diferentials.indexOf(diferential_t);
 
-            analitycPositions[index] = oscillation(new Analityc(), diferential_t, endTime);
+            analitycPositions[index] = oscillation(new Analityc(diferential_t), diferential_t, endTime);
 //            beenmanPositions[index] = oscillation(new Beeman(), diferential_t, endTime);
 //            gearPredictorPositions[index] = oscillation(new GearPredictor(), diferential_t, endTime);
 //            verletPositions[index] = oscillation(new Verlet(), diferential_t, endTime);
@@ -56,19 +55,19 @@ public class OsciladorAmortiguadoSimulation {
         return sum/one.length;
     }
 
-    private static double[] oscillation(Algorithm algorithm, double dt, double endtime){
+    private static double[] oscillation(Integrator integrator, double dt, double endtime){
         int bins = (int) (endtime/dt);
         double[] positions = new double[bins];
 
         for (int t=0 ; t < bins ; t++){
-            positions[t] = algorithm.nextPosition(dt*t);
-//            if (algorithm instanceof Analityc){
-//                positions[t] = algorithm.nextPosition(dt*t);
-//            }else if (algorithm instanceof Beeman){
+            positions[t] = integrator.nextPosition(dt*t);
+//            if (integrator instanceof Analityc){
+//                positions[t] = integrator.nextPosition(dt*t);
+//            }else if (integrator instanceof Beeman){
 //
-//            }else if (algorithm instanceof GearPredictor){
+//            }else if (integrator instanceof GearPredictor){
 //
-//            }else if (algorithm instanceof Verlet){
+//            }else if (integrator instanceof Verlet){
 //
 //            }
         }

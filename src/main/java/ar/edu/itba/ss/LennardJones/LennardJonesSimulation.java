@@ -1,6 +1,6 @@
 package ar.edu.itba.ss.LennardJones;
 
-import ar.edu.itba.ss.Algorithms.*;
+import ar.edu.itba.ss.Integrators.*;
 import ar.edu.itba.ss.io.Input;
 import ar.edu.itba.ss.models.Grid;
 import ar.edu.itba.ss.models.Particle;
@@ -20,14 +20,22 @@ public class LennardJonesSimulation {
     Input input;
     double gapStart;
     double gapEnd;
-    Algorithm currentAlgotithm;
-    public LennardJonesSimulation(double dt, Algorithm currentAlgotithm)
+    Integrator currentAlgotithm;
+    LennardJonesForce lennardJonesForceCalcuator;
+
+    public static void main(String args[]){
+        Double dt = 0.01;
+        LennardJonesSimulation lennardJonesSimulation = new LennardJonesSimulation(dt);
+    }
+
+    public LennardJonesSimulation(double dt)
     {
         Particle particle = new Particle(0,0,0,0,0,0);
         this.currentAlgotithm = currentAlgotithm;
-        Algorithm verletAlgorithm = new Verlet();
-        Algorithm BeemanAlgorithm = new Beeman();
-        Algorithm GearPredictorAlgorithm = new GearPredictor();
+        this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
+        Integrator verletIntegrator = new Verlet(dt);
+        Integrator beemanIntegrator = new Beeman(dt);
+        Integrator gearPredictorIntegrator = new GearPredictor(dt);
         this.input = new Input(Long.valueOf(100),0.1);
         this.simulate(dt);
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
@@ -41,6 +49,7 @@ public class LennardJonesSimulation {
         int iteration = 0;
         List<Particle> particles = input.getParticles();
 
+
         while (true) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
@@ -48,7 +57,7 @@ public class LennardJonesSimulation {
 
             List<Particle> auxParticle = new LinkedList<>();
             for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
-               auxParticle.add(move(particle.getKey(),particle.getValue()));
+               auxParticle.add(move(particle.getKey(),particle.getValue(), time));
             }
 
             //particles = nextParticles(neighbours);
@@ -60,10 +69,10 @@ public class LennardJonesSimulation {
 
     }
 
-    private Particle move(Particle p, List<Particle> neighbours){
+    private Particle move(Particle p, List<Particle> neighbours, Double time){
         neighbours = neighbours.stream().filter(n -> !isWallBetween(p, n)).collect(Collectors.toList());
         addWall(p,neighbours);
-        return currentAlgotithm.moveParticle(p,neighbours);
+        return currentAlgotithm.moveParticle(p, time, lennardJonesForceCalcuator.getForce(p, neighbours));
 
     }
 

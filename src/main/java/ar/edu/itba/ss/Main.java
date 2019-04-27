@@ -10,7 +10,7 @@ public class Main {
      * @param args  The arguments to manage the program.
      */
     public static void main(String[] args){
-        LennardJonesSimulation lennardJonesSimulation = new LennardJonesSimulation();
-        OsciladorAmortiguadoSimulation osciladorAmortiguadoSimulation = new OsciladorAmortiguadoSimulation();
+//        LennardJonesSimulation lennardJonesSimulation = new LennardJonesSimulation();
+//        OsciladorAmortiguadoSimulation osciladorAmortiguadoSimulation = new OsciladorAmortiguadoSimulation();
     }
 }

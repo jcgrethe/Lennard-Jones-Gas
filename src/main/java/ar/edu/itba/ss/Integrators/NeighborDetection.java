@@ -1,9 +1,9 @@
-package ar.edu.itba.ss.Algorithms;
+package ar.edu.itba.ss.Integrators;
 import ar.edu.itba.ss.models.Grid;
 import javafx.util.Pair;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Cell;
-import java.io.IOException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -122,5 +122,9 @@ public class NeighborDetection {
             return Math.min(h, Math.hypot(xc, yc));
         }
         return h;
+    }
+
+    public static Double getForce(Particle particle, List<Particle> neighbors){
+        return null;
     }
 }
