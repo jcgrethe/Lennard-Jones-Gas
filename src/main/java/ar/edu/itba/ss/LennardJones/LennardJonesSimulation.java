@@ -23,19 +23,11 @@ public class LennardJonesSimulation {
     Integrator currentAlgotithm;
     LennardJonesForce lennardJonesForceCalcuator;
 
-    public static void main(String args[]){
-        Double dt = 0.01;
-        LennardJonesSimulation lennardJonesSimulation = new LennardJonesSimulation(dt);
-    }
-
-    public LennardJonesSimulation(double dt)
+    public LennardJonesSimulation(double dt, Integrator integrator)
     {
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
-        Integrator verletIntegrator = new Verlet(dt,lennardJonesForceCalcuator);
-        Integrator beemanIntegrator = new Beeman(dt,lennardJonesForceCalcuator);
-        Integrator gearPredictorIntegrator = new GearPredictor(dt, lennardJonesForceCalcuator);
+        this.currentAlgotithm = integrator;
         this.input = new Input(Long.valueOf(100),0.1);
-        this.simulate(dt);
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
         gapEnd = input.getBoxHeight()- gapStart;
     }
@@ -58,8 +50,8 @@ public class LennardJonesSimulation {
                move(particle.getKey(),particle.getValue(), time);
             }
 
-            //particles = nextParticles(neighbours);
             //TODO: generate output
+
             time += dt;
             iteration++;
 //            particles=auxParticle;
@@ -76,7 +68,6 @@ public class LennardJonesSimulation {
 
     private void addWall(Particle p, List<Particle> neighbours ){
         int up = input.getBoxHeight();
-        int middle = input.getMiddleBoxWidth();
         int right = input.getBoxWidth();
         double ir = input.getInteractionRadio();
         //TOP

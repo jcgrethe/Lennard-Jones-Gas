@@ -43,9 +43,7 @@ public class Particle {
         this.radius = 0;
         this.mass = Double.POSITIVE_INFINITY;
     }
-    /**
-     * Big particles without radio and with infinite mass for simulating walls.
-     */
+
     public Particle(double radius, double mass, double x, double y, double vx, double vy) {
         this.id = serial_id++;
         this.radius = radius;
