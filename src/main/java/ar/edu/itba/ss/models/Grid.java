@@ -48,6 +48,9 @@ public class Grid {
         for (Particle particle : particles){
             int row = (int)Math.floor(particle.getY() / cellSideLength); // Cast truncates
             int column = (int)Math.floor(particle.getX() / cellSideLength); // Cast truncates
+            if (row > 10000 || column >10000 || row < 0 || column < 0) {
+                System.out.println("error");
+            }
             cells[row][column].addParticle(particle);
             usedCells.add(new Pair(row, column));
         }

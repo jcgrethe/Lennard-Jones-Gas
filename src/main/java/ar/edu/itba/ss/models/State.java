@@ -37,20 +37,6 @@ public class State {
         this.aAngle = 0.0;
     }
 
-    public State(double x, double y){
-        this.x = x;
-        this.y = y;
-        this.vX = 0.0;
-        this.vY = 0.0;
-        this.aX = 0.0;
-        this.aY = 0.0;
-        this.vModule = 0.0;
-        this.vAngle = 0.0;
-        this.aModule = 0.0;
-        this.aAngle = 0.0;
-
-    }
-
     public State(double x, double y, double vX, double vY, double aX, double aY) {
         this.x = x;
         this.y = y;

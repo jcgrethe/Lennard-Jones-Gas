@@ -6,7 +6,10 @@ import ar.edu.itba.ss.Integrators.Integrator;
 import ar.edu.itba.ss.LennardJones.LennardJonesForce;
 import ar.edu.itba.ss.LennardJones.LennardJonesSimulation;
 import ar.edu.itba.ss.OsciladorAmortiguado.OsciladorAmortiguadoSimulation;
+import ar.edu.itba.ss.io.Output;
 import org.apache.commons.cli.*;
+
+import java.io.IOException;
 
 public class Main {
     /**
@@ -14,9 +17,9 @@ public class Main {
      *
      * @param args  The arguments to manage the program.
      */
-    static final double DEFAULT_DT = 0.001;
+    static final double DEFAULT_DT = 0.1;
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
         LennardJonesForce l = new LennardJonesForce(1.0,2.0);
         Integrator i=null;
@@ -34,6 +37,7 @@ public class Main {
             else
                 throw new IllegalArgumentException();
         }
+        Output.generateXYZFile();
         if (i==null)
             i = new Beeman(DEFAULT_DT, l);
         LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i);
@@ -54,11 +58,11 @@ public class Main {
         options.addOption(dinamicInput);
 
         Option noise = new Option("v", "verlet", true, "verlet predictor");
-        noise.setRequired(true);
+        noise.setRequired(false);
         options.addOption(noise);
 
         Option quantity = new Option("N", "quantity", true, "quantity(N)");
-        quantity.setRequired(true);
+        quantity.setRequired(false);
         options.addOption(quantity);
 
         CommandLineParser parser = new DefaultParser();

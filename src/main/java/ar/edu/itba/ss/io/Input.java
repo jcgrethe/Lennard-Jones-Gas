@@ -15,7 +15,7 @@ public class Input {
     private static final Double defaultVelocity = 10.0;
     public static Double time = 100.0;
     private static final Double dt = 0.1;
-    private static final Double ParticleRadio = 0.005;
+    private static final Double ParticleRadio = 1.0;
     private static final Double ParticleMass = 0.0001;
     private int cellSideQuantity;
     private double interactionRadio;
@@ -65,12 +65,12 @@ public class Input {
                 vY = defaultVelocity*Math.sin(random);
             }while(!noOverlapParticle(x,y));
             this.particles.add(new Particle(
+                    ParticleRadio,
+                    ParticleMass,
                     x,
                     y,
                     vX,
-                    vY,
-                    ParticleRadio,
-                    ParticleMass
+                    vY
             ));
         }
         System.out.println("Done.]");

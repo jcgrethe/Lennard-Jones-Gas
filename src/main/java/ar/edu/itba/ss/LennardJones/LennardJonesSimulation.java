@@ -2,10 +2,12 @@ package ar.edu.itba.ss.LennardJones;
 
 import ar.edu.itba.ss.Integrators.*;
 import ar.edu.itba.ss.io.Input;
+import ar.edu.itba.ss.io.Output;
 import ar.edu.itba.ss.models.Grid;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Wall;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,15 +26,15 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt, Integrator integrator)
     {
+        this.input = new Input(Long.valueOf(1000),2);
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
-        this.input = new Input(Long.valueOf(100),0.1);
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
         gapEnd = input.getBoxHeight()- gapStart;
     }
 
 
-    public void simulate(double dt){
+    public void simulate(double dt) throws IOException {
 
         double time = 0;
         int iteration = 0;
@@ -48,7 +50,7 @@ public class LennardJonesSimulation {
             for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
                move(particle.getKey(),particle.getValue(), time);
             }
-
+            Output.printToFile(particles);
             //TODO: generate output
 
             time += dt;
