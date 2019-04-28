@@ -1,5 +1,9 @@
 package ar.edu.itba.ss.models;
 
+import ar.edu.itba.ss.Integrators.GearPredictor;
+
+import java.util.Optional;
+
 public class Particle {
     private static Long serial_id = Long.valueOf(0);
 
@@ -114,4 +118,9 @@ public class Particle {
     public Double getaY(){
         return currentState.getaY();
     }
+
+    public Optional<GearPredictor.GPState> getGPState(){
+        return currentState.getGPState();
+    }
+
 }
