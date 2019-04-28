@@ -19,6 +19,8 @@ public class LennardJonesForce {
         Double xForce = 0.0, yForce = 0.0, xDistance, yDistance, distanceMod;
 
         for (Particle p : neighbors){
+            if(p.getId() < 0)
+                System.out.println("pared");
             xDistance = Math.abs(x - p.getX());
             yDistance = Math.abs(y - p.getY());
             distanceMod = Math.sqrt(Math.pow(xDistance,2.0) + Math.pow(yDistance,2.0));

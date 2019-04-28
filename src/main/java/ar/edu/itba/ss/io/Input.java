@@ -16,7 +16,7 @@ public class Input {
     public static Double time = 100.0;
     private static final Double dt = 0.1;
     private static final Double ParticleRadio = 1.0;
-    private static final Double ParticleMass = 0.0001;
+    private static final Double ParticleMass = 0.1;
     private int cellSideQuantity;
     private double interactionRadio;
 

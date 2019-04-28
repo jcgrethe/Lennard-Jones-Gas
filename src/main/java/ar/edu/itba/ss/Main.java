@@ -3,6 +3,7 @@ package ar.edu.itba.ss;
 import ar.edu.itba.ss.Integrators.Beeman;
 import ar.edu.itba.ss.Integrators.GearPredictor;
 import ar.edu.itba.ss.Integrators.Integrator;
+import ar.edu.itba.ss.Integrators.VelocityVerlet;
 import ar.edu.itba.ss.LennardJones.LennardJonesForce;
 import ar.edu.itba.ss.LennardJones.LennardJonesSimulation;
 import ar.edu.itba.ss.OsciladorAmortiguado.OsciladorAmortiguadoSimulation;
@@ -33,7 +34,7 @@ public class Main {
         }
         if(cmd.getOptionValue('v')!= null){
             if (i==null)
-                i = new GearPredictor(DEFAULT_DT,l);
+                i = new VelocityVerlet(DEFAULT_DT,l);
             else
                 throw new IllegalArgumentException();
         }

@@ -21,6 +21,9 @@ public class Beeman extends Integrator {
                aY = force.getY()/particle.getMass();
         Double x = particle.getX() + particle.getvX()*dt + 2.0/3.0*aX*dt*dt-1.0/6.0*particle.getaX()*dt*dt;
         Double y = particle.getY() + particle.getvY()*dt + 2.0/3.0*aY*dt*dt-1.0/6.0*particle.getaY()*dt*dt;
+        if(x<0 || y < 0 || x>500 || y> 500)
+            System.out.println("error");
+
         Particle predictedParticle = new Particle(particle.getRadius(), particle.getMass(), x,y,particle.getvX(),particle.getvY());
 
         Point2D predictedForce = lennardJonesForce.getForce(predictedParticle, neighbors);
