@@ -4,6 +4,11 @@ public class Vector2D {
     private Double x;
     private Double y;
 
+    public Vector2D(){
+        this.x = 0.0;
+        this.y = 0.0;
+    }
+
     public Vector2D(Double x, Double y) {
         this.x = x;
         this.y = y;

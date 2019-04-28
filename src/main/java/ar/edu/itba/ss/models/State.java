@@ -27,7 +27,7 @@ public class State {
     private double aY;
     private double aAngle;
     private double aModule;
-    private Optional<GearPredictor.GPState> gpState;
+    private Optional<GPState> gpState;
 
     public State(double x, double y, double vX, double vY) {
         this.x = x;
@@ -125,11 +125,15 @@ public class State {
         return aModule;
     }
 
-    public void changeGPState(GearPredictor.GPState gpState){
+    public void changeGPState(GPState gpState){
         this.gpState = Optional.of(gpState);
     }
 
-    public Optional<GearPredictor.GPState> getGPState(){
+    public Optional<GPState> getGPState(){
         return gpState;
+    }
+    
+    public void setNewGPState(){
+        this.gpState = Optional.of(new GPState());
     }
 }

@@ -26,7 +26,7 @@ public class VelocityVerlet extends Integrator {
         Double vX = particle.getvX() + dt*(force.getX() + predictedForce.getX())/(2*particle.getMass());
         Double vY = particle.getvY() + dt*(force.getY() + predictedForce.getY())/(2*particle.getMass());
         // TODO CHECK WHAT IS LAST ELEMENT IN ECUATION "+ O(dt^3)" and "+ O(dt^2)"
-        particle.updateState(new State(
+        particle.setFutureState(new State(
                 x,y,vX,vY
         ));
     }
