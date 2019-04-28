@@ -21,6 +21,7 @@ public abstract class Integrator {
 
     public Double unidimensionalNextPosition(Particle particle, Double time) {
         moveParticle(particle, time, Collections.emptyList());
+        particle.updateState();
         return particle.getY();
     }
 }

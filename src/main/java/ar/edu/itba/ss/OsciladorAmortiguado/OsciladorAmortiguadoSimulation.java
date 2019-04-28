@@ -26,7 +26,7 @@ public class OsciladorAmortiguadoSimulation {
     public static void simulate()
     {
         Input input = new Input();
-        particle = new Particle(0.0, input.getM(), new State(
+        particle = new Particle(0.0, input.getMass(), new State(
                 0.0,input.getInitialX(),0.0,input.getInitialV(),0.0,0.0
         ));
         particle.setEmptyGPState();

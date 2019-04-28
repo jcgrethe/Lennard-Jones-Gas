@@ -144,6 +144,10 @@ public class Input {
         return m;
     }
 
+    public Double getMass() {
+        return M;
+    }
+
     public Double getR() {
         return r;
     }
