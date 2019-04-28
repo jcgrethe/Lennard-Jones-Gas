@@ -1,6 +1,7 @@
 package ar.edu.itba.ss.OsciladorAmortiguado;
 
 import ar.edu.itba.ss.Integrators.*;
+import ar.edu.itba.ss.LennardJones.LennardJonesForce;
 import ar.edu.itba.ss.io.Input;
 import ar.edu.itba.ss.io.Output;
 import ar.edu.itba.ss.models.Particle;
@@ -26,7 +27,7 @@ public class OsciladorAmortiguadoSimulation {
     {
         Input input = new Input();
         particle = new Particle(0.0, input.getM(), new State(
-                0.0,0.0,0.0,0.0,0.0,0.0 //TODO PUT input values
+                0.0,input.getInitialX(),0.0,input.getInitialV(),0.0,0.0
         ));
         Double[] dts = {0.0001, 0.001, 0.01, 0.1};
         List<Double> diferentials = Arrays.asList(dts);
@@ -41,17 +42,19 @@ public class OsciladorAmortiguadoSimulation {
         double[][] gearPredictorPositions = new double[diferentials.size()][];
         double[][] verletPositions = new double[diferentials.size()][];
 
+        LennardJonesForce lennardJonesForce = new LennardJonesForce(input.getRm(), input.getEpsilon());
+
         for (double diferential_t : diferentials){
             int index = diferentials.indexOf(diferential_t);
 
-//            analitycPositions[index] = oscillation(new Analityc(diferential_t), diferential_t, input.getEndTime());
-//            beenmanPositions[index] = oscillation(new Beeman(), diferential_t, endTime);
-//            gearPredictorPositions[index] = oscillation(new GearPredictor(), diferential_t, endTime);
-//            verletPositions[index] = oscillation(new Verlet(), diferential_t, endTime);
+            analitycPositions[index] = oscillation(new Analityc(diferential_t, lennardJonesForce, input.getA(), input.getK(), input.getY()), diferential_t, input.getEndTime(), particle);
+            beenmanPositions[index] = oscillation(new Beeman(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
+            gearPredictorPositions[index] = oscillation(new GearPredictor(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
+            verletPositions[index] = oscillation(new VelocityVerlet(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
 
-//            beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
-//            gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
-//            verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
+            beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
+            gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
+            verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
         }
         Output.printOscillationsResults(analitycPositions,beenmanPositions,gearPredictorPositions,verletPositions,beenmanError,gearPredictorError,verletError,diferentials);
     }
@@ -64,21 +67,12 @@ public class OsciladorAmortiguadoSimulation {
         return sum/one.length;
     }
 
-    private static double[] oscillation(Integrator integrator, double dt, double endtime){
+    private static double[] oscillation(Integrator integrator, double dt, double endtime, Particle particle){
         int bins = (int) (endtime/dt);
         double[] positions = new double[bins];
 
         for (int t=0 ; t < bins ; t++){
-//            positions[t] = integrator.moveParticle();
-//            if (integrator instanceof Analityc){
-//                positions[t] = integrator.nextPosition(dt*t);
-//            }else if (integrator instanceof Beeman){
-//
-//            }else if (integrator instanceof GearPredictor){
-//
-//            }else if (integrator instanceof Verlet){
-//
-//            }
+            positions[t] = integrator.unidimensionalNextPosition(particle, dt*t);
         }
 
         return positions;

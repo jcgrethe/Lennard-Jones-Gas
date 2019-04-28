@@ -31,8 +31,8 @@ public class Input {
     private Integer orificeLength = 10;
 
     // Default Parameters for Oscillation
-    private final Integer A = 1;       // TODO: Put real value
-    private final Integer K = 10000;   // In N/m
+    private final Double A = 1.0;       // TODO: Put real value
+    private final Double K = 10000.0;   // In N/m
     private final Double y = 100.0;    // In kg/s
     private final Double Tf = 5.0;     // In s
     private final Double M = 70.0;     // In Kilogrames
@@ -164,7 +164,7 @@ public class Input {
         return orificeLength;
     }
 
-    public Integer getA() {
+    public Double getA() {
         return A;
     }
 
@@ -176,7 +176,7 @@ public class Input {
         return endTime;
     }
 
-    public Integer getK() {
+    public Double getK() {
         return K;
     }
 

@@ -5,6 +5,7 @@ import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
 
 import java.awt.geom.Point2D;
+import java.util.Collections;
 import java.util.List;
 
 public class Analityc extends Integrator {
@@ -22,19 +23,19 @@ public class Analityc extends Integrator {
 
     @Override
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
-//        Double M = particle.getMass(), t  = time; TODO
-//        State newState = particle.getPreviousState();
-//
-//        return new Particle(particle.getRadius(), particle.getMass(),
-//                time,
-//                A*Math.exp(-(y/(2*M))*t)*Math.cos(Math.sqrt((K/M)-((y*y)/(4*M*M)))*t),
-//                particle.getvX(),
-//                particle.getvY()
-//        );
+        Double M = particle.getMass(), t  = time;
+        State newState = new State(
+                time, A*Math.exp(-(y/(2*M))*t)*Math.cos(Math.sqrt((K/M)-((y*y)/(4*M*M)))*t),
+                particle.getvX(),
+                particle.getvY()
+        );
+        particle.updateState(newState);
     }
 
     @Override
-    public Double nextPosition(Double t) {
-        return null;
+    public Double unidimensionalNextPosition(Particle particle, Double time) {
+        moveParticle(particle, time, Collections.emptyList());
+        return particle.getY();
     }
+
 }

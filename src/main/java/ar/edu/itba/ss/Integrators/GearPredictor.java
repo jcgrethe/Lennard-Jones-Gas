@@ -14,10 +14,12 @@ public class GearPredictor extends Integrator {
 
     @Override
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
+
     }
 
     @Override
-    public Double nextPosition(Double t) {
+    public Double unidimensionalNextPosition(Particle particle, Double time) {
         return null;
     }
+
 }

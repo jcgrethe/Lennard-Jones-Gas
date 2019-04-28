@@ -17,7 +17,7 @@ public abstract class Integrator {
     }
 
     public abstract void moveParticle(Particle particle, Double time, List<Particle> neighbors);
-    public abstract Double nextPosition(Double t);
+    public abstract Double unidimensionalNextPosition(Particle particle, Double time);
 
 
 }

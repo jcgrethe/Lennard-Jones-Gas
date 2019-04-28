@@ -33,7 +33,7 @@ public class Output {
             FileWriter ofw = new FileWriter(OSCILLATION_RESULTS_FILENAME);
             BufferedWriter obufferedw = new BufferedWriter(ofw);
             obufferedw.write(
-                    "ECM\\Algoritmo,Beeman,GP,Verlet"
+                    "ECM\\Algoritmo,Beeman,GP,VelocityVerlet"
             );
             obufferedw.newLine();
             for (int i=0 ; i < dts.size() ; i++) {
@@ -52,7 +52,7 @@ public class Output {
                     );
                     obufferedw.newLine();
                     obufferedw.write(
-                            "Analytic,Beeman,Gear Predictor,Verlet"
+                            "Analytic,Beeman,Gear Predictor,VelocityVerlet"
                     );
                     obufferedw.newLine();
                     for (int p=0 ; p < analitycPositions[i].length ; p++){

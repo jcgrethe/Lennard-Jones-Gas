@@ -6,7 +6,6 @@ import ar.edu.itba.ss.models.Grid;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Wall;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,7 +30,7 @@ public class LennardJonesSimulation {
     public LennardJonesSimulation(double dt)
     {
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
-        Integrator verletIntegrator = new Verlet(dt,lennardJonesForceCalcuator);
+        Integrator verletIntegrator = new VelocityVerlet(dt,lennardJonesForceCalcuator);
         Integrator beemanIntegrator = new Beeman(dt,lennardJonesForceCalcuator);
         Integrator gearPredictorIntegrator = new GearPredictor(dt, lennardJonesForceCalcuator);
         this.input = new Input(Long.valueOf(100),0.1);

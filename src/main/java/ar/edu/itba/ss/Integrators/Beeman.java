@@ -6,6 +6,7 @@ import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
 
 import java.awt.geom.Point2D;
+import java.util.Collections;
 import java.util.List;
 
 public class Beeman extends Integrator {
@@ -33,11 +34,10 @@ public class Beeman extends Integrator {
         particle.updateState(new State(
                 x,y,vX,vY,aX,aY
         ));
-//        return new Particle(particle.getRadius(),particle.getMass(),x,y,vX,vY,aX,aY);
+    }
+    public Double unidimensionalNextPosition(Particle particle, Double time){
+        moveParticle(particle, time, Collections.emptyList());
+        return particle.getY();
     }
 
-    @Override
-    public Double nextPosition(Double t) {
-        return null;
-    }
 }
