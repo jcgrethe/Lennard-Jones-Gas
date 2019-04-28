@@ -119,8 +119,12 @@ public class Particle {
         return currentState.getaY();
     }
 
-    public Optional<GearPredictor.GPState> getGPState(){
+    public Optional<GPState> getGPState(){
         return currentState.getGPState();
+    }
+
+    public void setEmptyGPState(){
+        currentState.setNewGPState();
     }
 
 }

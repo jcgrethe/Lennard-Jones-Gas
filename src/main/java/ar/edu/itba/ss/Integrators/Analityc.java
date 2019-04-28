@@ -25,7 +25,7 @@ public class Analityc extends Integrator {
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
         Double M = particle.getMass(), t  = time;
         State newState = new State(
-                time, A*Math.exp(-(y/(2*M))*t)*Math.cos(Math.sqrt((K/M)-((y*y)/(4*M*M)))*t),
+                time, A*Math.exp((-t)*(y/(2*M)))*Math.cos(Math.sqrt((K/M)-((y*y)/(4.0*M*M)))*t),
                 particle.getvX(),
                 particle.getvY()
         );
