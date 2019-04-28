@@ -6,59 +6,31 @@ public class Particle {
     private final Long id;
     private final double radius;
     private final double mass;
+    private State previousState;
+    private State currentState;
 
-    /**
-     * Position
-     */
-    private double x;
-    private double y;
-
-    /**
-     * Velocity
-     */
-    private double vX;
-    private double vY;
-    private double vAngle;
-    private double vModule;
-
-    /**
-     * Acceleration
-     */
-    private double aX;
-    private double aY;
-    private double aAngle;
-    private double aModule;
-
-    public Particle(double x, double y, double vX, double vY, double radius, double mass) {
+    public Particle(double radius, double mass) {
         this.id = serial_id++;
-        this.x = x;
-        this.y = y;
-        this.vX = vX;
-        this.vY = vY;
         this.radius = radius;
         this.mass = mass;
-        this.vModule = Math.hypot(vX, vY);
-        this.vAngle = Math.atan(vY/vX);
-        this.aX = 0;
-        this.aY = 0;
-        this.aModule = 0;
-        this.aAngle = 0;
+        this.previousState = new State();
+        this.currentState = new State();
     }
 
-    public Particle(double radius, double mass, double x, double y, double vX, double vY, double aX, double aY) {
+    public Particle(double radius, double mass, State previousState, State currentState) {
         this.id = serial_id++;
         this.radius = radius;
         this.mass = mass;
-        this.x = x;
-        this.y = y;
-        this.vX = vX;
-        this.vY = vY;
-        this.aX = aX;
-        this.aY = aY;
-        this.vModule = Math.hypot(vX, vY);
-        this.vAngle = Math.atan(vY/vX);
-        this.aModule = Math.hypot(aX, aY);
-        this.aAngle = Math.atan(aY/aX);
+        this.previousState = previousState;
+        this.currentState = currentState;
+    }
+
+    public Particle(double radius, double mass, State currentState) {
+        this.id = serial_id++;
+        this.radius = radius;
+        this.mass = mass;
+        this.previousState = null;
+        this.currentState = currentState;
     }
 
     /**
@@ -66,72 +38,21 @@ public class Particle {
      */
     public Particle(long id,double x, double y) {
         this.id = id;
-        this.x = x;
-        this.y = y;
-        this.vX = 0;
-        this.vY = 0;
+        previousState = new State(x, y, 0, 0, 0, 0);
+        currentState=previousState;
         this.radius = 0;
         this.mass = Double.POSITIVE_INFINITY;
-        this.vModule = Math.hypot(vX, vY);
-        this.vAngle = Math.atan(vY/vX);
-        this.aX = 0;
-        this.aY = 0;
-        this.aModule = 0;
-        this.aAngle = 0;
     }
-
-    public Long getId() {
-        return id;
+    /**
+     * Big particles without radio and with infinite mass for simulating walls.
+     */
+    public Particle(double radius, double mass, double x, double y, double vx, double vy) {
+        this.id = serial_id++;
+        this.radius = radius;
+        this.mass = mass;
+        previousState = new State(x, y, vx, vy, 0, 0);
+        currentState=previousState;
     }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getvX() {
-        return vX;
-    }
-
-    public double getvY() {
-        return vY;
-    }
-
-    public double getvAngle() {
-        return vAngle;
-    }
-
-    public double getvModule() {
-        return vModule;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public double getMass() {
-        return mass;
-    }
-
-    public double getaX() {
-        return aX;
-    }
-
-    public double getaY() {
-        return aY;
-    }
-
-    public double getaAngle() {
-        return aAngle;
-    }
-
-    public double getaModule() {
-        return aModule;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,4 +68,52 @@ public class Particle {
         return id.hashCode();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getMass() {
+        return mass;
+    }
+
+    public State getPreviousState() {
+        return previousState;
+    }
+
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public void updateState(State newCurrentState){
+        this.previousState = this.currentState;
+        this.currentState = newCurrentState;
+    }
+
+    public Double getX(){
+        return currentState.getX();
+    }
+
+    public Double getY(){
+        return currentState.getY();
+    }
+
+    public Double getvX(){
+        return currentState.getvX();
+    }
+
+    public Double getvY(){
+        return currentState.getvY();
+    }
+
+    public Double getaX(){
+        return currentState.getaX();
+    }
+
+    public Double getaY(){
+        return currentState.getaY();
+    }
 }

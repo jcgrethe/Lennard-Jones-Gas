@@ -30,12 +30,10 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt)
     {
-        Particle particle = new Particle(0,0,0,0,0,0);
-        this.currentAlgotithm = currentAlgotithm;
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
-        Integrator verletIntegrator = new Verlet(dt);
-        Integrator beemanIntegrator = new Beeman(dt);
-        Integrator gearPredictorIntegrator = new GearPredictor(dt);
+        Integrator verletIntegrator = new Verlet(dt,lennardJonesForceCalcuator);
+        Integrator beemanIntegrator = new Beeman(dt,lennardJonesForceCalcuator);
+        Integrator gearPredictorIntegrator = new GearPredictor(dt, lennardJonesForceCalcuator);
         this.input = new Input(Long.valueOf(100),0.1);
         this.simulate(dt);
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
@@ -55,25 +53,24 @@ public class LennardJonesSimulation {
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
 
-            List<Particle> auxParticle = new LinkedList<>();
+//            List<Particle> auxParticle = new LinkedList<>();
             for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
-               auxParticle.add(move(particle.getKey(),particle.getValue(), time));
+               move(particle.getKey(),particle.getValue(), time);
             }
 
             //particles = nextParticles(neighbours);
             //TODO: generate output
             time += dt;
             iteration++;
-            particles=auxParticle;
+//            particles=auxParticle;
         }
 
     }
 
-    private Particle move(Particle p, List<Particle> neighbours, Double time){
+    private void move(Particle p, List<Particle> neighbours, Double time){
         neighbours = neighbours.stream().filter(n -> !isWallBetween(p, n)).collect(Collectors.toList());
         addWall(p,neighbours);
-        return currentAlgotithm.moveParticle(p, time, neighbours);
-
+        currentAlgotithm.moveParticle(p, time, neighbours); //Update States
     }
 
 

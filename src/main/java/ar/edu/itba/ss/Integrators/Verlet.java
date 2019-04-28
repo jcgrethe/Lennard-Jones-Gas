@@ -13,8 +13,8 @@ public class Verlet extends Integrator {
     }
 
     @Override
-    public Particle moveParticle(Particle particle, Double time, List<Particle> neighbors) {
-        return null;
+    public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
+
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Beeman extends Integrator {
     }
 
     @Override
-    public Particle moveParticle(Particle particle, Double time, List<Particle> neighbors) {
+    public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
         Point2D force = lennardJonesForce.getForce(particle, neighbors);
         Double aX = force.getX()/particle.getMass(),
                aY = force.getY()/particle.getMass();
@@ -29,7 +29,11 @@ public class Beeman extends Integrator {
         Double vX = particle.getvX() + predictedAX*dt/3.0 + 5.0/6.0*aX-particle.getaX()*dt/6.0;
         Double vY = particle.getvY() + predictedAY*dt/3.0 + 5.0/6.0*aY-particle.getaY()*dt/6.0;
 
-        return new Particle(particle.getRadius(),particle.getMass(),x,y,vX,vY,aX,aY);
+
+        particle.updateState(new State(
+                x,y,vX,vY,aX,aY
+        ));
+//        return new Particle(particle.getRadius(),particle.getMass(),x,y,vX,vY,aX,aY);
     }
 
     @Override

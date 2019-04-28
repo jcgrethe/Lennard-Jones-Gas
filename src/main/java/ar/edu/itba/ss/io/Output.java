@@ -146,29 +146,29 @@ public class Output {
         }
     }
 
-    public static void generateVelocitiesFile(String filename, List<Particle> particles){
-        try{
-            FileWriter statisticsFileWriter = new FileWriter(filename);
-            BufferedWriter statisticsBuffererWriter = new BufferedWriter(statisticsFileWriter);
-
-            statisticsBuffererWriter.write(
-                    "particle,velocity"
-            );
-            statisticsBuffererWriter.newLine();
-            particles.forEach(particle -> {try{
-                statisticsBuffererWriter.write(
-                        particle.getId() + "," + particle.getvModule()
-                );
-                statisticsBuffererWriter.newLine();
-            }catch (IOException e){
-                System.out.println(e);
-            }});
-            statisticsBuffererWriter.flush();
-
-        }catch(IOException e){
-            System.out.println(e);
-        }
-    }
+//    public static void generateVelocitiesFile(String filename, List<Particle> particles){
+//        try{
+//            FileWriter statisticsFileWriter = new FileWriter(filename);
+//            BufferedWriter statisticsBuffererWriter = new BufferedWriter(statisticsFileWriter);
+//
+//            statisticsBuffererWriter.write(
+//                    "particle,velocity"
+//            );
+//            statisticsBuffererWriter.newLine();
+//            particles.forEach(particle -> {try{
+//                statisticsBuffererWriter.write(
+//                        particle.getId() + "," + particle.getvModule()
+//                );
+//                statisticsBuffererWriter.newLine();
+//            }catch (IOException e){
+//                System.out.println(e);
+//            }});
+//            statisticsBuffererWriter.flush();
+//
+//        }catch(IOException e){
+//            System.out.println(e);
+//        }
+//    }
 
 
     public static void generateInputFiles(Long totalParticlesQuantity, int sideLength, List<Particle> particles){

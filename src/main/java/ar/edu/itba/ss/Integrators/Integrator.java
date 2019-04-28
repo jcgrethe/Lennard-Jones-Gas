@@ -16,7 +16,7 @@ public abstract class Integrator {
         this.lennardJonesForce = lennardJonesForce;
     }
 
-    public abstract Particle moveParticle(Particle particle, Double time, List<Particle> neighbors);
+    public abstract void moveParticle(Particle particle, Double time, List<Particle> neighbors);
     public abstract Double nextPosition(Double t);
 
 
