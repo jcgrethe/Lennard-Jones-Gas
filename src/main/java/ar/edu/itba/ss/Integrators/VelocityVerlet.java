@@ -30,11 +30,4 @@ public class VelocityVerlet extends Integrator {
                 x,y,vX,vY
         ));
     }
-
-    @Override
-    public Double unidimensionalNextPosition(Particle particle, Double time) {
-        moveParticle(particle, time, Collections.emptyList());
-        return particle.getY();
-    }
-
 }

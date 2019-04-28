@@ -75,11 +75,6 @@ public class GearPredictor extends Integrator {
         }
     }
 
-    @Override
-    public Double unidimensionalNextPosition(Particle particle, Double time) {
-        return null;
-    }
-
     private Vector2D getR(GPState gpState){
         return new Vector2D(gpState.getR())
                 .add(gpState.getR1().multiply(Math.pow(dt,1)/periodicNumbers[1]))
