@@ -31,7 +31,7 @@ public class Beeman extends Integrator {
         Double vY = particle.getvY() + predictedAY*dt/3.0 + 5.0/6.0*aY-particle.getaY()*dt/6.0;
 
 
-        particle.updateState(new State(
+        particle.setFutureState(new State(
                 x,y,vX,vY,aX,aY
         ));
     }

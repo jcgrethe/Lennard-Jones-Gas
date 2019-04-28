@@ -50,6 +50,9 @@ public class LennardJonesSimulation {
             for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
                move(particle.getKey(),particle.getValue(), time);
             }
+            for (Particle particle : particles){
+                particle.updateState();
+            }
             Output.printToFile(particles);
             //TODO: generate output
 

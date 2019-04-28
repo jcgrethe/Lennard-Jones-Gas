@@ -29,6 +29,6 @@ public class Analityc extends Integrator {
                 particle.getvX(),
                 particle.getvY()
         );
-        particle.updateState(newState);
+        particle.setFutureState(newState);
     }
 }

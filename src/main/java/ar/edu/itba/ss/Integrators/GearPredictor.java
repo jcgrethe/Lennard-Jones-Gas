@@ -70,8 +70,8 @@ public class GearPredictor extends Integrator {
             );
 
             // Finally, update the new state
-            particle.updateState(newParticleState);
-            particle.getCurrentState().changeGPState(correctedGPState);
+            newParticleState.changeGPState(correctedGPState);
+            particle.setFutureState(newParticleState);
         }else {
             throw new IllegalStateException("No GPState founded, could not predict new position.");
         }

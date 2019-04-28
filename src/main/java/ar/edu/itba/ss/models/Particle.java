@@ -12,6 +12,7 @@ public class Particle {
     private final double mass;
     private State previousState;
     private State currentState;
+    private State futureState;
 
     public Particle(double radius, double mass) {
         this.id = serial_id++;
@@ -19,6 +20,7 @@ public class Particle {
         this.mass = mass;
         this.previousState = new State();
         this.currentState = new State();
+        this.futureState = null;
     }
 
     public Particle(double radius, double mass, State previousState, State currentState) {
@@ -27,6 +29,7 @@ public class Particle {
         this.mass = mass;
         this.previousState = previousState;
         this.currentState = currentState;
+        this.futureState = null;
     }
 
     public Particle(double radius, double mass, State currentState) {
@@ -35,6 +38,7 @@ public class Particle {
         this.mass = mass;
         this.previousState = null;
         this.currentState = currentState;
+        this.futureState = null;
     }
 
     /**
@@ -90,9 +94,14 @@ public class Particle {
         return currentState;
     }
 
-    public void updateState(State newCurrentState){
+    public void setFutureState(State futureState){
+        this.futureState = futureState;
+    }
+
+    public void updateState(){
         this.previousState = this.currentState;
-        this.currentState = newCurrentState;
+        this.currentState = this.futureState;
+        this.futureState = null;
     }
 
     public Double getX(){
