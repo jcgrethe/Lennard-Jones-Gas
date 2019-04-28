@@ -29,7 +29,7 @@ public class OsciladorAmortiguadoSimulation {
         particle = new Particle(0.0, input.getM(), new State(
                 0.0,input.getInitialX(),0.0,input.getInitialV(),0.0,0.0
         ));
-        Double[] dts = {0.0001, 0.001, 0.01, 0.1};
+        Double[] dts = {0.001, 0.01, 0.1};
         List<Double> diferentials = Arrays.asList(dts);
         diferentials.sort(Comparator.comparingDouble(Double::doubleValue));
 //        diferentials.sort(Comparator.comparingDouble(Double::doubleValue).reversed());
@@ -49,12 +49,12 @@ public class OsciladorAmortiguadoSimulation {
 
             analitycPositions[index] = oscillation(new Analityc(diferential_t, lennardJonesForce, input.getA(), input.getK(), input.getY()), diferential_t, input.getEndTime(), particle);
             beenmanPositions[index] = oscillation(new Beeman(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
-            gearPredictorPositions[index] = oscillation(new GearPredictor(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
-            verletPositions[index] = oscillation(new VelocityVerlet(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
+//            gearPredictorPositions[index] = oscillation(new GearPredictor(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
+//            verletPositions[index] = oscillation(new VelocityVerlet(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle);
 
             beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
-            gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
-            verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
+//            gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
+//            verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
         }
         Output.printOscillationsResults(analitycPositions,beenmanPositions,gearPredictorPositions,verletPositions,beenmanError,gearPredictorError,verletError,diferentials);
     }

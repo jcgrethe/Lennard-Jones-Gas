@@ -1,5 +1,9 @@
 package ar.edu.itba.ss.models;
 
+import ar.edu.itba.ss.Integrators.GearPredictor;
+
+import java.util.Optional;
+
 public class State {
 
     /**
@@ -23,6 +27,7 @@ public class State {
     private double aY;
     private double aAngle;
     private double aModule;
+    private Optional<GearPredictor.GPState> gpState;
 
     public State(double x, double y, double vX, double vY) {
         this.x = x;
@@ -35,6 +40,7 @@ public class State {
         this.aY = 0.0;
         this.aModule = 0.0;
         this.aAngle = 0.0;
+        this.gpState = Optional.empty();
     }
 
     public State(double x, double y){
@@ -48,7 +54,7 @@ public class State {
         this.vAngle = 0.0;
         this.aModule = 0.0;
         this.aAngle = 0.0;
-
+        this.gpState = Optional.empty();
     }
 
     public State(double x, double y, double vX, double vY, double aX, double aY) {
@@ -62,6 +68,7 @@ public class State {
         this.vAngle = Math.atan(vY/vX);
         this.aModule = Math.hypot(aX, aY);
         this.aAngle = Math.atan(aY/aX);
+        this.gpState = Optional.empty();
     }
 
     public State(){
@@ -75,6 +82,7 @@ public class State {
         this.vAngle = 0.0;
         this.aModule = 0.0;
         this.aAngle = 0.0;
+        this.gpState = Optional.empty();
     }
 
     public double getX() {
@@ -115,5 +123,13 @@ public class State {
 
     public double getaModule() {
         return aModule;
+    }
+
+    public void changeGPState(GearPredictor.GPState gpState){
+        this.gpState = Optional.of(gpState);
+    }
+
+    public Optional<GearPredictor.GPState> getGPState(){
+        return gpState;
     }
 }
