@@ -35,9 +35,4 @@ public class Beeman extends Integrator {
                 x,y,vX,vY,aX,aY
         ));
     }
-    public Double unidimensionalNextPosition(Particle particle, Double time){
-        moveParticle(particle, time, Collections.emptyList());
-        return particle.getY();
-    }
-
 }

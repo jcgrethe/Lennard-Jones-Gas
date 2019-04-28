@@ -31,11 +31,4 @@ public class Analityc extends Integrator {
         );
         particle.updateState(newState);
     }
-
-    @Override
-    public Double unidimensionalNextPosition(Particle particle, Double time) {
-        moveParticle(particle, time, Collections.emptyList());
-        return particle.getY();
-    }
-
 }

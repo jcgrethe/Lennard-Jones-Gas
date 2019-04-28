@@ -5,6 +5,7 @@ import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
 
 import java.awt.geom.Point2D;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Integrator {
@@ -17,7 +18,9 @@ public abstract class Integrator {
     }
 
     public abstract void moveParticle(Particle particle, Double time, List<Particle> neighbors);
-    public abstract Double unidimensionalNextPosition(Particle particle, Double time);
 
-
+    public Double unidimensionalNextPosition(Particle particle, Double time) {
+        moveParticle(particle, time, Collections.emptyList());
+        return particle.getY();
+    }
 }
