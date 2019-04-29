@@ -26,6 +26,16 @@ public class GPState{
         this.r5 = new Vector2D();
     }
 
+    public GPState(Double x, Double y, Double vx, Double vy){
+        this.r = new Vector2D(x,y);
+        this.r1 = new Vector2D(vx,vy);
+        this.r2 = new Vector2D();
+        this.r3 = new Vector2D();
+        this.r4 = new Vector2D();
+        this.r5 = new Vector2D();
+    }
+
+
     public Vector2D getR() {
         return r;
     }
