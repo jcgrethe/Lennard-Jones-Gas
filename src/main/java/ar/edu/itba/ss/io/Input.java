@@ -79,7 +79,7 @@ public class Input {
     private boolean noOverlapParticle(Double x, Double y){
         if (particles.size() == 0) return true;
         for (Particle particle : particles){
-                if ( (Math.pow(particle.getX() - x, 2) + Math.pow(particle.getY() - y, 2)) <= Math.pow(particle.getRadius() + ParticleRadio, 2)){
+                if ( (Math.pow(particle.getX() - x, 2) + Math.pow(particle.getY() - y, 2)) <= Math.pow(particle.getRadius() + ParticleRadio + Rm, 2)){
                     return false;
             }
         }
@@ -142,6 +142,10 @@ public class Input {
 
     public Double getM() {
         return m;
+    }
+
+    public Double getMass() {
+        return M;
     }
 
     public Double getR() {

@@ -133,7 +133,7 @@ public class State {
         return gpState;
     }
     
-    public void setNewGPState(){
-        this.gpState = Optional.of(new GPState());
+    public void setNewGPState(Double x, Double y, Double vx, Double vy){
+        this.gpState = Optional.of(new GPState(x,y, vx, vy));
     }
 }
