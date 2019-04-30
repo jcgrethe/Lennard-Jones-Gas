@@ -36,7 +36,7 @@ public class Particle {
         this.id = serial_id++;
         this.radius = radius;
         this.mass = mass;
-        this.previousState = null;
+        this.previousState =  new State(0, 0, 0, 0, 0, 0);
         this.currentState = currentState;
         this.futureState = null;
     }
@@ -46,8 +46,8 @@ public class Particle {
      */
     public Particle(long id,double x, double y) {
         this.id = id;
-        previousState = new State(x, y, 0, 0, 0, 0);
-        currentState=previousState;
+        currentState = new State(x, y, 0, 0, 0, 0);
+        previousState = new State(0, 0, 0, 0, 0, 0);
         this.radius = 0;
         this.mass = Double.POSITIVE_INFINITY;
     }
@@ -56,8 +56,8 @@ public class Particle {
         this.id = serial_id++;
         this.radius = radius;
         this.mass = mass;
-        previousState = new State(x, y, vx, vy, 0, 0);
-        currentState=previousState;
+        currentState = new State(x, y, vx, vy, 0, 0);
+        previousState = new State(0, 0, 0, 0, 0, 0);
     }
     @Override
     public boolean equals(Object o) {
