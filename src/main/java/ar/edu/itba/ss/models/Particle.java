@@ -128,6 +128,13 @@ public class Particle {
         return currentState.getaY();
     }
 
+    public Vector2D getPosition(){ return new Vector2D(getX(),getY());}
+    public Vector2D getPreviousPosition(){ return new Vector2D(getPreviousState().getX(),getPreviousState().getY());}
+    public Vector2D getVelocity(){ return new Vector2D(getvX(),getvY());}
+    public Vector2D getPreviousVelocity(){ return new Vector2D(getPreviousState().getvX(),getPreviousState().getvY());}
+    public Vector2D getAcceleration(){ return new Vector2D(getaX(),getaY());}
+    public Vector2D getPreviousAcceleration(){ return new Vector2D(getPreviousState().getaX(),getPreviousState().getaY());}
+
     public Optional<GPState> getGPState(){
         return currentState.getGPState();
     }
