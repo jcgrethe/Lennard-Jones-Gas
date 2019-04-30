@@ -1,12 +1,10 @@
 package ar.edu.itba.ss.Integrators;
 
-import ar.edu.itba.ss.LennardJones.LennardJonesForce;
+import ar.edu.itba.ss.models.ForceFunction;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
 import ar.edu.itba.ss.models.Vector2D;
 
-import java.awt.geom.Point2D;
-import java.util.Collections;
 import java.util.List;
 
 public class VelocityVerlet extends Integrator {

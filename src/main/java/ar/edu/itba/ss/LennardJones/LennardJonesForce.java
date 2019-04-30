@@ -1,10 +1,9 @@
 package ar.edu.itba.ss.LennardJones;
 
-import ar.edu.itba.ss.Integrators.ForceFunction;
+import ar.edu.itba.ss.models.ForceFunction;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Vector2D;
 
-import java.awt.geom.Point2D;
 import java.util.List;
 
 public class LennardJonesForce implements ForceFunction {

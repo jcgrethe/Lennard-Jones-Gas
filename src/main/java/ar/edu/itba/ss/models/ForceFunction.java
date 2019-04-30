@@ -1,4 +1,4 @@
-package ar.edu.itba.ss.Integrators;
+package ar.edu.itba.ss.models;
 
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Vector2D;

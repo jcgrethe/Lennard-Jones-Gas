@@ -1,14 +1,8 @@
 package ar.edu.itba.ss.Integrators;
 
-import ar.edu.itba.ss.LennardJones.LennardJonesForce;
-import ar.edu.itba.ss.models.GPState;
-import ar.edu.itba.ss.models.Particle;
-import ar.edu.itba.ss.models.State;
-import ar.edu.itba.ss.models.Vector2D;
+import ar.edu.itba.ss.models.*;
 
-import java.awt.geom.Point2D;
 import java.util.List;
-import java.util.Vector;
 
 public class GearPredictor extends Integrator {
     private final Integer[] periodicNumbers = {1, 1, 2, 6, 24, 120};
