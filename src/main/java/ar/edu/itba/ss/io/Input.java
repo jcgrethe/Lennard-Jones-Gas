@@ -15,7 +15,7 @@ public class Input {
     private static final Double defaultVelocity = 10.0;
     public static Double time = 100.0;
     private static final Double dt = 0.1;
-    private static final Double ParticleRadio = 1.0;
+    private static final Double ParticleRadio = 0.0;
     private static final Double ParticleMass = 0.1;
     private int cellSideQuantity;
     private double interactionRadio;
@@ -50,16 +50,16 @@ public class Input {
      */
     public Input(Long quantity,double interactionRadio){
         System.out.print("[Generating Input... ");
-        this.interactionRadio = interactionRadio;
-        this.cellSideQuantity = (int) Math.ceil(boxWidth/interactionRadio) - 1 ;
+        this.interactionRadio = r;
+        this.cellSideQuantity = (int) Math.ceil(boxWidth/interactionRadio);
         this.ParticlesQuantity = quantity;
         this.particles = new ArrayList<>();
 
         for (int p = 0 ; p < ParticlesQuantity ; p++ ){
             Double x,y,vX,vY;
             do{
-                x =  ThreadLocalRandom.current().nextDouble(ParticleRadio, boxHeight-ParticleRadio);
-                y =  ThreadLocalRandom.current().nextDouble(ParticleRadio, boxHeight-ParticleRadio);
+                x =  ThreadLocalRandom.current().nextDouble(r, boxHeight-r);
+                y =  ThreadLocalRandom.current().nextDouble(r, boxHeight-r);
                 double random = 2 * Math.PI * Math.random();
                 vX = defaultVelocity*Math.cos(random);
                 vY = defaultVelocity*Math.sin(random);
@@ -79,7 +79,7 @@ public class Input {
     private boolean noOverlapParticle(Double x, Double y){
         if (particles.size() == 0) return true;
         for (Particle particle : particles){
-                if ( (Math.pow(particle.getX() - x, 2) + Math.pow(particle.getY() - y, 2)) <= Math.pow(particle.getRadius() + ParticleRadio + Rm, 2)){
+                if ( (Math.pow(particle.getX() - x, 2) + Math.pow(particle.getY() - y, 2)) <= Math.pow(particle.getRadius() + ParticleRadio + r, 2)){
                     return false;
             }
         }

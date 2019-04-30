@@ -18,8 +18,8 @@ public class NeighborDetection {
      * @param contornCondition      True if the contorn condition is on.
      * @return  A Map with a {@link List} of {@link Particle}s for each Particle.
      */
-    public static Map<Particle, List<Particle>> getNeighbors(Grid grid, HashSet<Pair<Integer, Integer>> usedCells, Double interactionRadio, Boolean contornCondition){
-        Map<Particle, List<Particle>> result = new HashMap<>();
+    public static Map<Particle, Set<Particle>> getNeighbors(Grid grid, HashSet<Pair<Integer, Integer>> usedCells, Double interactionRadio, Boolean contornCondition){
+        Map<Particle, Set<Particle>> result = new HashMap<>();
         // Foreach cell with particles
         usedCells.forEach(pair -> {
             int i = pair.getKey(), j = pair.getValue();
@@ -27,8 +27,8 @@ public class NeighborDetection {
                 List<Particle> currentNeighbors = new ArrayList<>();
                 List<Particle> sameCell = new ArrayList<>();
 
-                //get the neighboor added before or a new linked list
-                final List<Particle> neighbors = result.getOrDefault(current, new LinkedList<>());
+                //get the neighbor added before or a new linked list
+                final Set<Particle> neighbors = result.getOrDefault(current, new HashSet<>());
 
                 if (!contornCondition) {
                     //Check the four neighbors taking advantage of the simetry.
@@ -82,7 +82,7 @@ public class NeighborDetection {
 
                 //for each neighbors add current to the relation
                 for (Particle newRelation : currentNeighbors) {
-                    final List<Particle> anotherNeighbors = result.getOrDefault(newRelation, new LinkedList<>());
+                    final Set<Particle> anotherNeighbors = result.getOrDefault(newRelation, new HashSet<>());
                     anotherNeighbors.add(current);
                     result.put(newRelation, anotherNeighbors);
                 }

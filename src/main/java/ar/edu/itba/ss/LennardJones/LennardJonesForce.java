@@ -28,6 +28,8 @@ public class LennardJonesForce {
             final Double forceMagnitude = calculateMagnitude(distanceMod);
             xForce += forceMagnitude*xDistance/distanceMod;
             yForce += forceMagnitude*yDistance/distanceMod;
+            if(Math.abs(xForce)>50 || Math.abs(yForce)>50 )
+                System.out.println("error");
         }
 
         return new Point2D.Double(xForce, yForce);
@@ -45,6 +47,6 @@ public class LennardJonesForce {
 
 
     private Double calculateMagnitude(Double r){
-        return 12.0*e/rm*( Math.pow(rm/r ,13.0) - Math.pow(rm/r, 7));
+        return 12.0*e*( Math.pow(rm/r ,13.0) - Math.pow(rm/r, 7))/ rm;
     }
 }

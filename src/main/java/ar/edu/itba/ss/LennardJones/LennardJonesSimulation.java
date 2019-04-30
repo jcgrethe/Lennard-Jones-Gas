@@ -8,8 +8,10 @@ import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Wall;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -26,7 +28,7 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt, Integrator integrator)
     {
-        this.input = new Input(Long.valueOf(1000),2);
+        this.input = new Input(Long.valueOf(100),5);
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
@@ -41,14 +43,15 @@ public class LennardJonesSimulation {
         List<Particle> particles = input.getParticles();
 
 
-        while (true) {
+        while (iteration<100) {
+            System.out.println("itertion: " + iteration);
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
-            Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
+            Map<Particle, Set<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
 
 //            List<Particle> auxParticle = new LinkedList<>();
-            for(Map.Entry<Particle,List<Particle>> particle: neighbours.entrySet()){
-               move(particle.getKey(),particle.getValue(), time);
+            for(Map.Entry<Particle,Set<Particle>> particle: neighbours.entrySet()){
+               move(particle.getKey(),new LinkedList<Particle>(particle.getValue()), time);
             }
             for (Particle particle : particles){
                 particle.updateState();
@@ -74,6 +77,8 @@ public class LennardJonesSimulation {
         int up = input.getBoxHeight();
         int right = input.getBoxWidth();
         double ir = input.getInteractionRadio();
+        double x = p.getX();
+        double y = p.getY();
         //TOP
         if(up - p.getY() <= ir)
             neighbours.add(new Particle(Wall.typeOfWall.TOP.getVal(),p.getX(),up));

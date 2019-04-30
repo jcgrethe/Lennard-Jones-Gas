@@ -18,7 +18,7 @@ public class Main {
      *
      * @param args  The arguments to manage the program.
      */
-    static final double DEFAULT_DT = 0.1;
+    static final double DEFAULT_DT = 0.01;
 
     public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
