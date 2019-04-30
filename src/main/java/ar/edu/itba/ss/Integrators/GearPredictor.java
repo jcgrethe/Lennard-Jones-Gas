@@ -20,8 +20,8 @@ public class GearPredictor extends Integrator {
     private Double correctFactor4;
     private Double correctFactor5;
 
-    public GearPredictor(Double dt, LennardJonesForce lennardJonesForce) {
-        super(dt, lennardJonesForce);
+    public GearPredictor(Double dt, ForceFunction forceFunction) {
+        super(dt, forceFunction);
         this.correctFactor0 = 3d / 16d;
         this.correctFactor1 = (251d / 360d) / dt;
         this.correctFactor2 = 1d * (2d / Math.pow(dt,2));
@@ -46,9 +46,9 @@ public class GearPredictor extends Integrator {
             );
 
             //Evaluate
-            Vector2D force = lennardJonesForce.getForce(predictedGPState.getR(), neighbors);
+            Vector2D force = forceFunction.getForce(predictedGPState.getR(), predictedGPState.getR1(), neighbors);
             Vector2D acceleration = force.multiply(1.0/particle.getMass());
-            Vector2D deltaAcceleration = gpState.getR2().add(predictedGPState.getR2());
+            Vector2D deltaAcceleration = acceleration.add(predictedGPState.getR2().multiply(-1.0));
             Vector2D deltaR2 = deltaAcceleration.multiply(dt*dt/periodicNumbers[2]);
 
             //Correct

@@ -1,7 +1,6 @@
 package ar.edu.itba.ss.OsciladorAmortiguado;
 
 import ar.edu.itba.ss.Integrators.*;
-import ar.edu.itba.ss.LennardJones.LennardJonesForce;
 import ar.edu.itba.ss.io.Input;
 import ar.edu.itba.ss.io.Output;
 import ar.edu.itba.ss.models.Particle;
@@ -26,7 +25,7 @@ public class OsciladorAmortiguadoSimulation {
     public static void simulate()
     {
         Input input = new Input();
-        Double[] dts = {0.01, 0.1};
+        Double[] dts = {0.00001};
         List<Double> diferentials = Arrays.asList(dts);
         diferentials.sort(Comparator.comparingDouble(Double::doubleValue));
 //        diferentials.sort(Comparator.comparingDouble(Double::doubleValue).reversed());
@@ -39,15 +38,15 @@ public class OsciladorAmortiguadoSimulation {
         double[][] gearPredictorPositions = new double[diferentials.size()][];
         double[][] verletPositions = new double[diferentials.size()][];
 
-        LennardJonesForce lennardJonesForce = new LennardJonesForce(input.getRm(), input.getEpsilon());
+        OscillatorForce oscillatorForce = new OscillatorForce(input.getY(), input.getK());
 
         for (double diferential_t : diferentials){
             int index = diferentials.indexOf(diferential_t);
 
-            analitycPositions[index] = oscillation(new Analityc(diferential_t, lennardJonesForce, input.getA(), input.getK(), input.getY()), diferential_t, input.getEndTime(), particle, input);
-            beenmanPositions[index] = oscillation(new Beeman(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle, input);
-            gearPredictorPositions[index] = oscillation(new GearPredictor(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle, input);
-            verletPositions[index] = oscillation(new VelocityVerlet(diferential_t, lennardJonesForce), diferential_t, input.getEndTime(), particle, input);
+            analitycPositions[index] = oscillation(new Analityc(diferential_t, oscillatorForce, input.getA(), input.getK(), input.getY()), diferential_t, input.getEndTime(), particle, input);
+            beenmanPositions[index] = oscillation(new Beeman(diferential_t, oscillatorForce), diferential_t, input.getEndTime(), particle, input);
+            gearPredictorPositions[index] = oscillation(new GearPredictor(diferential_t, oscillatorForce), diferential_t, input.getEndTime(), particle, input);
+            verletPositions[index] = oscillation(new VelocityVerlet(diferential_t, oscillatorForce), diferential_t, input.getEndTime(), particle, input);
 
             beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
             gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);

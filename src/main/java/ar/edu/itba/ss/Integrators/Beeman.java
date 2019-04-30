@@ -4,29 +4,30 @@ import ar.edu.itba.ss.LennardJones.LennardJonesForce;
 import ar.edu.itba.ss.LennardJones.LennardJonesSimulation;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
+import ar.edu.itba.ss.models.Vector2D;
 
 import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 
 public class Beeman extends Integrator {
-    public Beeman(Double dt, LennardJonesForce lennardJonesForce) {
-        super(dt, lennardJonesForce);
+    public Beeman(Double dt, ForceFunction forceFunction) {
+        super(dt, forceFunction);
     }
 
     @Override
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
-        Point2D force = lennardJonesForce.getForce(particle, neighbors);
+        Vector2D force = forceFunction.getForce(new Vector2D(particle.getX(), particle.getY()), new Vector2D(particle.getvX(), particle.getvY()), neighbors);
         Double aX = force.getX()/particle.getMass(),
                aY = force.getY()/particle.getMass();
         Double x = particle.getX() + particle.getvX()*dt + 2.0/3.0*aX*dt*dt - 1.0/6.0*particle.getaX()*dt*dt;
         Double y = particle.getY() + particle.getvY()*dt + 2.0/3.0*aY*dt*dt-1.0/6.0*particle.getaY()*dt*dt;
-        if(x<0 || y < 0 || x>500 || y> 500)
-            System.out.println("error");
+//        if(x<0 || y < 0 || x>500 || y> 500)
+//            System.out.println("error");
 
         Particle predictedParticle = new Particle(particle.getRadius(), particle.getMass(), x,y,particle.getvX(),particle.getvY());
 
-        Point2D predictedForce = lennardJonesForce.getForce(predictedParticle, neighbors);
+        Vector2D predictedForce = forceFunction.getForce(new Vector2D(predictedParticle.getX(),predictedParticle.getY()), new Vector2D(predictedParticle.getvX(), predictedParticle.getvY()), neighbors);
         Double predictedAX = predictedForce.getX()/particle.getMass(),
                 predictedAY = predictedForce.getY()/particle.getMass();
 
@@ -35,7 +36,7 @@ public class Beeman extends Integrator {
 
 
         particle.setFutureState(new State(
-                x,y,vX,vY,aX,aY
+                x,y,vX,vY,predictedAX,predictedAY
         ));
     }
 }
