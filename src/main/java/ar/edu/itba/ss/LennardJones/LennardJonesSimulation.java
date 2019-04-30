@@ -43,7 +43,7 @@ public class LennardJonesSimulation {
         List<Particle> particles = input.getParticles();
 
 
-        while (iteration<100) {
+        while (iteration<10000) {
             System.out.println("itertion: " + iteration);
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);

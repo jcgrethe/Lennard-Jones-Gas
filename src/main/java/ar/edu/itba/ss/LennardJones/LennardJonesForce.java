@@ -21,13 +21,13 @@ public class LennardJonesForce {
         for (Particle p : neighbors){
             if(p.getId() < 0)
                 System.out.println("pared");
-            xDistance = Math.abs(x - p.getX());
-            yDistance = Math.abs(y - p.getY());
+            xDistance = p.getX() - x;
+            yDistance = p.getY() - y;
             distanceMod = Math.sqrt(Math.pow(xDistance,2.0) + Math.pow(yDistance,2.0));
 
             final Double forceMagnitude = calculateMagnitude(distanceMod);
-            xForce += forceMagnitude*xDistance/distanceMod;
-            yForce += forceMagnitude*yDistance/distanceMod;
+            xForce += forceMagnitude* (xDistance/distanceMod);
+            yForce += forceMagnitude* (yDistance/distanceMod);
             if(Math.abs(xForce)>50 || Math.abs(yForce)>50 )
                 System.out.println("error");
         }
@@ -46,7 +46,7 @@ public class LennardJonesForce {
     }
 
 
-    private Double calculateMagnitude(Double r){
-        return 12.0*e*( Math.pow(rm/r ,13.0) - Math.pow(rm/r, 7))/ rm;
+    private double calculateMagnitude(final double r) {
+        return 12 * e * (Math.pow(rm / r, 13) - Math.pow(rm / r, 7)) / rm;
     }
 }
