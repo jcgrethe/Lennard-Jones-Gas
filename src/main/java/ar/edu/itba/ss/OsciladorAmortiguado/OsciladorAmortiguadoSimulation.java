@@ -25,7 +25,7 @@ public class OsciladorAmortiguadoSimulation {
     public static void simulate()
     {
         Input input = new Input();
-        Double[] dts = {0.001};
+        Double[] dts = {0.00001};
         List<Double> diferentials = Arrays.asList(dts);
         diferentials.sort(Comparator.comparingDouble(Double::doubleValue));
 //        diferentials.sort(Comparator.comparingDouble(Double::doubleValue).reversed());

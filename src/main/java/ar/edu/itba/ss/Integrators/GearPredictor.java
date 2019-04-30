@@ -1,5 +1,6 @@
 package ar.edu.itba.ss.Integrators;
 
+import ar.edu.itba.ss.OsciladorAmortiguado.OscillatorForce;
 import ar.edu.itba.ss.models.*;
 
 import java.util.List;
@@ -16,14 +17,21 @@ public class GearPredictor extends Integrator {
 
     public GearPredictor(Double dt, ForceFunction forceFunction) {
         super(dt, forceFunction);
-        this.correctFactor0 = 3d / 16d;
+        setFactors();
+    }
+
+    public void setFactors(){
+        if (forceFunction instanceof OscillatorForce){
+            this.correctFactor0 = 3d / 16d;
+        }else {
+            this.correctFactor0 = 3d / 20d;
+        }
         this.correctFactor1 = (251d / 360d) / dt;
         this.correctFactor2 = 1d * (2d / Math.pow(dt,2));
         this.correctFactor3 = (11d / 18d) * (6d / Math.pow(dt,3));
         this.correctFactor4 = (1d / 6d) * (24d / Math.pow(dt,4));
         this.correctFactor5 = (1d / 60d) * (120d / Math.pow(dt,5));
     }
-
     @Override
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
         if (particle.getGPState().isPresent()){
