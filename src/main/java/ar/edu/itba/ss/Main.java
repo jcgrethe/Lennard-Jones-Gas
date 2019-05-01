@@ -18,7 +18,7 @@ public class Main {
      *
      * @param args  The arguments to manage the program.
      */
-    static final double DEFAULT_DT = 0.01;
+    static final double DEFAULT_DT = 0.0005;
 
     public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
@@ -28,7 +28,7 @@ public class Main {
             i = new Beeman(DEFAULT_DT,l);
         if(cmd.getOptionValue('g')!= null){
             if (i==null)
-                i = new GearPredictor(0.001,l);
+                i = new GearPredictor(DEFAULT_DT,l);
             else
                 throw new IllegalArgumentException();
         }
@@ -50,17 +50,17 @@ public class Main {
 
         Options options = new Options();
 
-        Option staticInput = new Option("b", "beeman", true, "beeman");
-        staticInput.setRequired(false);
-        options.addOption(staticInput);
+        Option beeman = new Option("b", "beeman", false, "beeman");
+        beeman.setRequired(false);
+        options.addOption(beeman);
 
-        Option dinamicInput = new Option("g", "gear", true, "gear predictor");
-        dinamicInput.setRequired(false);
-        options.addOption(dinamicInput);
+        Option gear = new Option("g", "gear", false, "gear predictor");
+        gear.setRequired(false);
+        options.addOption(gear);
 
-        Option noise = new Option("v", "verlet", true, "verlet predictor");
-        noise.setRequired(false);
-        options.addOption(noise);
+        Option verlet = new Option("v", "verlet", false, "verlet predictor");
+        verlet.setRequired(false);
+        options.addOption(verlet);
 
         Option quantity = new Option("N", "quantity", true, "quantity(N)");
         quantity.setRequired(false);

@@ -22,8 +22,6 @@ public class LennardJonesForce implements ForceFunction {
         Double y = position.getY();
 
         for (Particle p : neighbors){
-            if(p.getId() < 0)
-                System.out.println("pared");
             xDistance = p.getX() - x;
             yDistance = p.getY() - y;
             distanceMod = Math.sqrt(Math.pow(xDistance,2.0) + Math.pow(yDistance,2.0));

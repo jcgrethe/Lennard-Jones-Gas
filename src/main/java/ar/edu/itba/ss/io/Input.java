@@ -49,7 +49,7 @@ public class Input {
     /**
      * Empty constructor generates random inputs based in the max and min setted for each variable.
      */
-    public Input(Long quantity,double interactionRadio){
+    public Input(Long quantity){
         System.out.print("[Generating Input... ");
         this.interactionRadio = r;
         this.cellSideQuantity = (int) Math.ceil(boxWidth/interactionRadio);
