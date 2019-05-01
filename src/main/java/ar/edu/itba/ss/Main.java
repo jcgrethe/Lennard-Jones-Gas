@@ -18,7 +18,7 @@ public class Main {
      *
      * @param args  The arguments to manage the program.
      */
-    static final double DEFAULT_DT = 0.01;
+    static final double DEFAULT_DT = 0.00001;
 
     public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
@@ -28,7 +28,7 @@ public class Main {
             i = new Beeman(DEFAULT_DT,l);
         if(cmd.getOptionValue('g')!= null){
             if (i==null)
-                i = new GearPredictor(0.001,l);
+                i = new GearPredictor(DEFAULT_DT,l);
             else
                 throw new IllegalArgumentException();
         }

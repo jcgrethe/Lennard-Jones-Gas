@@ -136,4 +136,12 @@ public class State {
     public void setNewGPState(Double x, Double y, Double vx, Double vy){
         this.gpState = Optional.of(new GPState(x,y, vx, vy));
     }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
 }

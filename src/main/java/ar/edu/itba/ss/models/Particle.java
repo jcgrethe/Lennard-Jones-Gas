@@ -132,6 +132,15 @@ public class Particle {
         return currentState.getGPState();
     }
 
+    public void setX(double x ){
+        this.currentState.setX(x);
+    }
+
+    public void setY(double y){
+        this.currentState.setY(y);
+    }
+
+
     public void initializeGPState(Double x, Double y, Double vx, Double vy){
         currentState.setNewGPState(x,y, vx, vy);
     }

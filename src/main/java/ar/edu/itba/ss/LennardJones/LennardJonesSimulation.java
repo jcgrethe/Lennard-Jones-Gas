@@ -28,7 +28,7 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt, Integrator integrator)
     {
-        this.input = new Input(Long.valueOf(100),5);
+        this.input = new Input(Long.valueOf(1000));
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
@@ -43,25 +43,22 @@ public class LennardJonesSimulation {
         List<Particle> particles = input.getParticles();
 
 
-        while (iteration<10000) {
-            System.out.println("itertion: " + iteration);
+        while (true) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
-            Map<Particle, Set<Particle>> neighbours = NeighborDetection.getNeighbors(grid,grid.getUsedCells(),input.getInteractionRadio(),false);
+            Map<Particle, Set<Particle>> neighbours = NeighborDetection.getNeighbors(grid, grid.getUsedCells(), input.getInteractionRadio(), false);
 
-//            List<Particle> auxParticle = new LinkedList<>();
-            for(Map.Entry<Particle,Set<Particle>> particle: neighbours.entrySet()){
-               move(particle.getKey(),new LinkedList<Particle>(particle.getValue()), time);
-            }
-            for (Particle particle : particles){
-                particle.updateState();
-            }
-            Output.printToFile(particles);
-            //TODO: generate output
+            double auxtime = time;
+            neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), new LinkedList<Particle>(particle.getValue()), auxtime));
 
+            particles.stream().parallel().forEach(Particle::updateState);
+
+            if (iteration % 1000 == 0){
+                System.out.println(time);
+                Output.printToFile(particles);
+            }
             time += dt;
             iteration++;
-//            particles=auxParticle;
         }
 
     }
@@ -77,8 +74,6 @@ public class LennardJonesSimulation {
         int up = input.getBoxHeight();
         int right = input.getBoxWidth();
         double ir = input.getInteractionRadio();
-        double x = p.getX();
-        double y = p.getY();
         //TOP
         if(up - p.getY() <= ir)
             neighbours.add(new Particle(Wall.typeOfWall.TOP.getVal(),p.getX(),up));
