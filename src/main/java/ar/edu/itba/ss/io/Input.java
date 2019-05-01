@@ -13,7 +13,7 @@ public class Input {
     private Long ParticlesQuantity;
     private List<Particle> particles;
     private static final Double defaultVelocity = 10.0;
-    public static Double time = 100.0;
+    public static Double time = 50.0;
     private static final Double dt = 0.1;
     private static final Double ParticleRadio = 0.0;
     private static final Double ParticleMass = 0.1;

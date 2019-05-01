@@ -18,12 +18,13 @@ public class Main {
      *
      * @param args  The arguments to manage the program.
      */
-    static final double DEFAULT_DT = 0.0005;
+    static final double DEFAULT_DT = 0.0001;
 
     public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
         LennardJonesForce l = new LennardJonesForce(1.0,2.0);
         Output.generateXYZFile();
+        Output.generateEnergyStadistics();
         Integrator i= new VelocityVerlet(DEFAULT_DT,l);
         LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i);
         simulation.simulate(DEFAULT_DT);

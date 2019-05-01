@@ -42,8 +42,8 @@ public class LennardJonesSimulation {
         int iteration = 0;
         List<Particle> particles = input.getParticles();
 
-
-        while (true) {
+        long start = System.currentTimeMillis();
+        while (time< Input.time) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid, grid.getUsedCells(), input.getInteractionRadio(), false);
@@ -52,15 +52,15 @@ public class LennardJonesSimulation {
             neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), particle.getValue(), auxtime));
 
             particles.stream().parallel().forEach(Particle::updateState);
-
-            if (iteration % 1000 == 0){
-                Output.printEnergy(neighbours,input);
+            if (((int)((time % 0.1)*10000)) == 0){
+                Output.printEnergy(neighbours,input,((int)(time*10))/10.0);
                 System.out.println(time);
                 Output.printToFile(particles);
             }
             time += dt;
             iteration++;
         }
+        System.out.println(System.currentTimeMillis() - start);
 
     }
 

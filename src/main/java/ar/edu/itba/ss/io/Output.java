@@ -10,10 +10,12 @@ import java.util.Map;
 public class Output {
     private final static String FILENAME = "output.txt";
     private final static String SIMULATION_FILENAME = "positions.xyz";
-    private final static String STATISTICS_FILENAME = "statistics_collisions_per_unit_of_time.csv";
+    private final static String STATISTICS_FILENAME = "statistics_energy_per_unit_of_time.csv";
     private final static String OSCILLATION_RESULTS_FILENAME = "oscillation_results.csv";
 
     private static BufferedWriter simulationBufferedWriter;
+    private static BufferedWriter energyBufferedWriter;
+
 
     public static void printOscillationsResults(double[][] analitycPositions,
                                                 double[][] beemanPositions,
@@ -107,13 +109,29 @@ public class Output {
         simulationBufferedWriter.flush();
     }
 
-    public static void printEnergy(Map<Particle,List<Particle>> particles, Input input){
+    public static void generateEnergyStadistics(){
+        try{
+            FileWriter fileWriter = new FileWriter(STATISTICS_FILENAME);
+            energyBufferedWriter = new BufferedWriter(fileWriter);
+            energyBufferedWriter.write("time,energy,error");
+            energyBufferedWriter.newLine();
+            energyBufferedWriter.flush();
+        }catch(IOException e){
+            System.out.println(e);
+        }
+    }
+
+
+    public static void printEnergy(Map<Particle,List<Particle>> particles, Input input,double time) throws IOException {
         double kineticE = 0.0, potencialE = 0.0;
         for (Map.Entry<Particle,List<Particle>> entry : particles.entrySet()){
             kineticE+= kinetic(entry.getKey());
             potencialE+=potencial(entry.getKey(),entry.getValue(),input.getRm(),input.getEpsilon());
         }
-        System.out.println("Potencial:"+ potencialE + ", Kinetic:" +kineticE + ", Total: " + (potencialE+kineticE));
+        double error = energyError(5000, kineticE+potencialE);
+        energyBufferedWriter.write(time+","+(kineticE+potencialE)+","+ error);
+        energyBufferedWriter.newLine();
+        energyBufferedWriter.flush();
     }
 
     public static double kinetic(Particle p){
@@ -125,7 +143,7 @@ public class Output {
         double acum= 0.0;
         for(Particle n: neighbors){
             double aux = e * ( Math.pow(rm/getDistances(p,n),12) - 2 * Math.pow(rm/getDistances(p,n),6) );
-            acum+= (n.getId()<0)?aux*2:aux;
+            acum+= aux;
         }
         return acum;
     }
@@ -136,5 +154,8 @@ public class Output {
         return Math.hypot(y, x);
     }
 
+    public static double energyError(double analitic, double predicted){
+        return Math.pow(analitic - predicted, 2);
+    }
 
 }
