@@ -54,6 +54,7 @@ public class LennardJonesSimulation {
             particles.stream().parallel().forEach(Particle::updateState);
 
             if (iteration % 1000 == 0){
+                Output.printEnergy(neighbours,input);
                 System.out.println(time);
                 Output.printToFile(particles);
             }

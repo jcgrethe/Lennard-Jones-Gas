@@ -102,5 +102,34 @@ public class Output {
         simulationBufferedWriter.flush();
     }
 
+    public static void printEnergy(Map<Particle,List<Particle>> particles, Input input){
+        double kineticE = 0.0, potencialE = 0.0;
+        for (Map.Entry<Particle,List<Particle>> entry : particles.entrySet()){
+            kineticE+= kinetic(entry.getKey());
+            potencialE+=potencial(entry.getKey(),entry.getValue(),input.getRm(),input.getEpsilon());
+        }
+        System.out.println("Potencial:"+ potencialE + ", Kinetic:" +kineticE + ", Total: " + (potencialE+kineticE));
+    }
+
+    public static double kinetic(Particle p){
+        return 0.5 * p.getMass() * Math.pow(p.getCurrentState().getvModule(),2);
+    }
+
+
+    public static double potencial(Particle p, List<Particle> neighbors, double rm, double e){
+        double acum= 0.0;
+        for(Particle n: neighbors){
+            double aux = 4 * e * ( Math.pow(rm/getDistances(p,n),12) - Math.pow(rm/getDistances(p,n),6) );
+            acum+= (n.getId()<0)?aux*2:aux;
+        }
+        return acum;
+    }
+
+    private static double getDistances(Particle p1, Particle p2){
+        double y = Math.abs(p2.getY() - p1.getY());
+        double x = Math.abs(p2.getX() - p1.getX());
+        return Math.hypot(y, x);
+    }
+
 
 }
