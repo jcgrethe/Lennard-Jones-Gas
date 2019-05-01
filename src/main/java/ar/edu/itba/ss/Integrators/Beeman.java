@@ -42,25 +42,34 @@ public class Beeman extends Integrator {
             ));
         }else {
             Vector2D force = forceFunction.getForce(particle.getPosition(), particle.getVelocity(), neighbors);
-            Double aX = force.getX()/particle.getMass(),
-                    aY = force.getY()/particle.getMass();
-            Double x = particle.getX() + particle.getvX()*dt + 2.0/3.0*aX*dt*dt - 1.0/6.0*particle.getaX()*dt*dt;
-            Double y = particle.getY() + particle.getvY()*dt + 2.0/3.0*aY*dt*dt-1.0/6.0*particle.getaY()*dt*dt;
-//        if(x<0 || y < 0 || x>500 || y> 500)
-//            System.out.println("error");
-
-            Particle predictedParticle = new Particle(particle.getRadius(), particle.getMass(), x,y,particle.getvX(),particle.getvY());
-
-            Vector2D predictedForce = forceFunction.getForce(new Vector2D(predictedParticle.getX(),predictedParticle.getY()), new Vector2D(predictedParticle.getvX(), predictedParticle.getvY()), neighbors);
-            Double predictedAX = predictedForce.getX()/particle.getMass(),
-                    predictedAY = predictedForce.getY()/particle.getMass();
-
-            Double vX = particle.getvX() + predictedAX*dt/3.0 + 5.0/6.0*aX-particle.getaX()*dt/6.0;
-            Double vY = particle.getvY() + predictedAY*dt/3.0 + 5.0/6.0*aY-particle.getaY()*dt/6.0;
-
+            Vector2D previousAcceleration;
+            if (time == 0){
+                previousAcceleration = new Vector2D(
+                    force.getX()/particle.getMass(),
+                    force.getY()/particle.getMass()
+                );
+            }else{
+                previousAcceleration = new Vector2D(
+                    particle.getPreviousAcceleration().getX(),
+                    particle.getPreviousAcceleration().getX()
+                );
+            }
+            Vector2D position = particle.getPosition()
+                    .add(particle.getVelocity().multiply(dt))
+                    .add(particle.getAcceleration().multiply(2d*dt*dt/3d))
+                    .add(previousAcceleration.multiply(-dt*dt/6d));
+            Vector2D predictedAcceleration = forceFunction.getForce(
+                    new Vector2D(position.getX(), position.getY()), particle.getVelocity(), neighbors)
+                    .multiply(1d/particle.getMass());
+            Vector2D velocity = particle.getVelocity()
+                    .add(predictedAcceleration.multiply(dt/3d))
+                    .add(particle.getAcceleration().multiply(5d*dt/6d))
+                    .add(previousAcceleration.multiply(-dt/6d));
 
             particle.setFutureState(new State(
-                    x,y,vX,vY,predictedAX,predictedAY
+                    position.getX(),position.getY(),
+                    velocity.getX(), velocity.getY(),
+                    predictedAcceleration.getX(), predictedAcceleration.getY()
             ));
         }
     }
