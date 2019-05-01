@@ -52,13 +52,15 @@ public class Output {
                     );
                     obufferedw.newLine();
                     for (int p=0 ; p < analitycPositions[i].length ; p++){
-                        obufferedw.write(
-                                analitycPositions[i][p] + "," +
-                                beemanPositions[i][p] + "," +
-                                GearPredictorPositions[i][p] + "," +
-                                verletPositions[i][p]
-                        );
-                        obufferedw.newLine();
+                        if (p % 100 == 0){
+                            obufferedw.write(
+                                    analitycPositions[i][p] + "," +
+                                            beemanPositions[i][p] + "," +
+                                            GearPredictorPositions[i][p] + "," +
+                                            verletPositions[i][p]
+                            );
+                            obufferedw.newLine();
+                        }
                     }
                 }catch (IOException e) {
                 }
