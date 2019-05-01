@@ -1,14 +1,9 @@
 package ar.edu.itba.ss.Integrators;
 
-import ar.edu.itba.ss.LennardJones.LennardJonesForce;
-import ar.edu.itba.ss.models.GPState;
-import ar.edu.itba.ss.models.Particle;
-import ar.edu.itba.ss.models.State;
-import ar.edu.itba.ss.models.Vector2D;
+import ar.edu.itba.ss.OsciladorAmortiguado.OscillatorForce;
+import ar.edu.itba.ss.models.*;
 
-import java.awt.geom.Point2D;
 import java.util.List;
-import java.util.Vector;
 
 public class GearPredictor extends Integrator {
     private final Integer[] periodicNumbers = {1, 1, 2, 6, 24, 120};
@@ -20,16 +15,23 @@ public class GearPredictor extends Integrator {
     private Double correctFactor4;
     private Double correctFactor5;
 
-    public GearPredictor(Double dt, LennardJonesForce lennardJonesForce) {
-        super(dt, lennardJonesForce);
-        this.correctFactor0 = 3d / 16d;
+    public GearPredictor(Double dt, ForceFunction forceFunction) {
+        super(dt, forceFunction);
+        setFactors();
+    }
+
+    public void setFactors(){
+        if (forceFunction instanceof OscillatorForce){
+            this.correctFactor0 = 3d / 16d;
+        }else {
+            this.correctFactor0 = 3d / 20d;
+        }
         this.correctFactor1 = (251d / 360d) / dt;
         this.correctFactor2 = 1d * (2d / Math.pow(dt,2));
         this.correctFactor3 = (11d / 18d) * (6d / Math.pow(dt,3));
         this.correctFactor4 = (1d / 6d) * (24d / Math.pow(dt,4));
         this.correctFactor5 = (1d / 60d) * (120d / Math.pow(dt,5));
     }
-
     @Override
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
         if (particle.getGPState().isPresent()){
@@ -46,9 +48,9 @@ public class GearPredictor extends Integrator {
             );
 
             //Evaluate
-            Vector2D force = lennardJonesForce.getForce(predictedGPState.getR(), neighbors);
+            Vector2D force = forceFunction.getForce(predictedGPState.getR(), predictedGPState.getR1(), neighbors);
             Vector2D acceleration = force.multiply(1.0/particle.getMass());
-            Vector2D deltaAcceleration = gpState.getR2().add(predictedGPState.getR2());
+            Vector2D deltaAcceleration = acceleration.add(predictedGPState.getR2().multiply(-1.0));
             Vector2D deltaR2 = deltaAcceleration.multiply(dt*dt/periodicNumbers[2]);
 
             //Correct

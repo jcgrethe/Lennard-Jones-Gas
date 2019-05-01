@@ -1,20 +1,18 @@
 package ar.edu.itba.ss.Integrators;
 
-import ar.edu.itba.ss.LennardJones.LennardJonesForce;
+import ar.edu.itba.ss.models.ForceFunction;
 import ar.edu.itba.ss.models.Particle;
-import ar.edu.itba.ss.models.State;
 
-import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 
 public abstract class Integrator {
     Double dt;
-    LennardJonesForce lennardJonesForce;
+    ForceFunction forceFunction;
 
-    public Integrator(Double dt, LennardJonesForce lennardJonesForce) {
+    public Integrator(Double dt, ForceFunction forceFunction) {
         this.dt = dt;
-        this.lennardJonesForce = lennardJonesForce;
+        this.forceFunction = forceFunction;
     }
 
     public abstract void moveParticle(Particle particle, Double time, List<Particle> neighbors);

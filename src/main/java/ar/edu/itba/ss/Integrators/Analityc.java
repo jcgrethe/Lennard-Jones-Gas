@@ -1,11 +1,9 @@
 package ar.edu.itba.ss.Integrators;
 
-import ar.edu.itba.ss.LennardJones.LennardJonesForce;
+import ar.edu.itba.ss.models.ForceFunction;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.State;
 
-import java.awt.geom.Point2D;
-import java.util.Collections;
 import java.util.List;
 
 public class Analityc extends Integrator {
@@ -14,8 +12,8 @@ public class Analityc extends Integrator {
     private Double K;
     private Double y;
 
-    public Analityc(Double dt, LennardJonesForce lennardJonesForce, Double A, Double K, Double y) {
-        super(dt, lennardJonesForce);
+    public Analityc(Double dt, ForceFunction forceFunction, Double A, Double K, Double y) {
+        super(dt, forceFunction);
         this.A = A;
         this.K = K;
         this.y = y;
