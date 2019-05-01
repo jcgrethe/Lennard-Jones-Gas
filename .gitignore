@@ -8,6 +8,7 @@
 .project
 .classpath
 factoryConfiguration.json
+*.xyz
 
 ### Eclipse ###
 .metadata
@@ -21,7 +22,6 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-positions.xyz
 
 # External tool builders
 .externalToolBuilders/

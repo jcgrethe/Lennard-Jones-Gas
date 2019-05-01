@@ -18,8 +18,8 @@ public class NeighborDetection {
      * @param contornCondition      True if the contorn condition is on.
      * @return  A Map with a {@link List} of {@link Particle}s for each Particle.
      */
-    public static Map<Particle, Set<Particle>> getNeighbors(Grid grid, HashSet<Pair<Integer, Integer>> usedCells, Double interactionRadio, Boolean contornCondition){
-        Map<Particle, Set<Particle>> result = new HashMap<>();
+    public static Map<Particle, List<Particle>> getNeighbors(Grid grid, HashSet<Pair<Integer, Integer>> usedCells, Double interactionRadio, Boolean contornCondition){
+        Map<Particle, List<Particle>> result = new HashMap<>();
         // Foreach cell with particles
         usedCells.forEach(pair -> {
             int i = pair.getKey(), j = pair.getValue();
@@ -28,37 +28,27 @@ public class NeighborDetection {
                 List<Particle> sameCell = new ArrayList<>();
 
                 //get the neighbor added before or a new linked list
-                final Set<Particle> neighbors = result.getOrDefault(current, new HashSet<>());
+                final List<Particle> neighbors = result.getOrDefault(current, new LinkedList<>());
 
                 if (!contornCondition) {
                     //Check the four neighbors taking advantage of the simetry.
                     if (i != 0)
                         currentNeighbors.addAll(getNeighborParticles(current,
                                 grid.getCell(i - 1, j), interactionRadio, contornCondition, grid.getSideLength()));
-                    if (i != grid.getSideCellsQuantity() - 1)
-                        currentNeighbors.addAll(getNeighborParticles(current,
-                                grid.getCell(i + 1, j), interactionRadio, contornCondition, grid.getSideLength()));
-
-                    if (j != grid.getSideCellsQuantity() - 1)
-                        currentNeighbors.addAll(getNeighborParticles(current,
-                                grid.getCell(i, j + 1), interactionRadio, contornCondition, grid.getSideLength()));
-                    if (j != 0)
-                        currentNeighbors.addAll(getNeighborParticles(current,
-                                grid.getCell(i, j - 1), interactionRadio, contornCondition, grid.getSideLength()));
 
                     if (i != 0 && j != grid.getSideCellsQuantity() - 1)
                         currentNeighbors.addAll(getNeighborParticles(current,
                                 grid.getCell(i - 1, j + 1), interactionRadio, contornCondition, grid.getSideLength()));
+
+                    if (j != grid.getSideCellsQuantity() - 1)
+                        currentNeighbors.addAll(getNeighborParticles(current,
+                                grid.getCell(i, j + 1), interactionRadio, contornCondition, grid.getSideLength()));
+
                     if (j != grid.getSideCellsQuantity() - 1 && i != grid.getSideCellsQuantity() - 1)
                         currentNeighbors.addAll(getNeighborParticles(current,
                                 grid.getCell(i + 1, j + 1), interactionRadio, contornCondition, grid.getSideLength()));
-                    if (i != grid.getSideCellsQuantity() - 1 && j != 0)
-                        currentNeighbors.addAll(getNeighborParticles(current,
-                                grid.getCell(i + 1, j - 1), interactionRadio, contornCondition, grid.getSideLength()));
-                    if (j != 0 && i != 0)
-                        currentNeighbors.addAll(getNeighborParticles(current,
-                                grid.getCell(i - 1, j - 1), interactionRadio, contornCondition, grid.getSideLength()));
-                }else {
+
+                    }else {
                         currentNeighbors.addAll(getNeighborParticles(current,
                                 grid.getSideCell((i - 1)  , j), interactionRadio, contornCondition, grid.getSideLength()));
 
@@ -82,7 +72,7 @@ public class NeighborDetection {
 
                 //for each neighbors add current to the relation
                 for (Particle newRelation : currentNeighbors) {
-                    final Set<Particle> anotherNeighbors = result.getOrDefault(newRelation, new HashSet<>());
+                    final List<Particle> anotherNeighbors = result.getOrDefault(newRelation, new LinkedList<>());
                     anotherNeighbors.add(current);
                     result.put(newRelation, anotherNeighbors);
                 }

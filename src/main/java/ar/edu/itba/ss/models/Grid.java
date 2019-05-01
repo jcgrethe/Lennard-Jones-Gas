@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static javafx.application.Platform.exit;
+
 public class Grid {
     private Cell[][] cells;
     private HashSet<Pair<Integer, Integer>> usedCells;
@@ -56,8 +58,23 @@ public class Grid {
                 column = 0;
                 particle.setX(0.1);
             }
-            cells[row][column].addParticle(particle);
-            usedCells.add(new Pair(row, column));
+            if(column >= sideCellsQuantity){
+                column = sideCellsQuantity - 1;
+                particle.setX(399);
+            }
+            if(row >= sideCellsQuantity/2){
+                row = sideCellsQuantity/2 - 1;
+                particle.setY(199);
+            }
+            try {
+                cells[row][column].addParticle(particle);
+                usedCells.add(new Pair(row, column));
+            }catch (Exception e){
+                System.out.println("row:" + row + " column:" + column);
+                System.out.println(sideCellsQuantity);
+                System.out.println(cells.length);
+                System.exit(0);
+            }
         }
     }
 
