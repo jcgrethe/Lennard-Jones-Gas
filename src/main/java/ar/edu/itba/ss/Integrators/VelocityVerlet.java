@@ -19,14 +19,13 @@ public class VelocityVerlet extends Integrator {
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
         if (forceFunction instanceof LennardJonesForce){
             Vector2D force = forceFunction.getForce(new Vector2D(particle.getX(),particle.getY()), new Vector2D(particle.getvX(), particle.getvY()),neighbors);
-            Double x = particle.getX()*2.0 - particle.getvX() + dt*dt/particle.getMass()*force.getX();
-            Double y = particle.getY()*2.0 - particle.getvY() + dt*dt/particle.getMass()*force.getY();
-
-            Double vX = (x - particle.getPreviousState().getX())*1.0/2.0*dt;
-            Double vY = (y - particle.getPreviousState().getY())*1.0/2.0*dt;
+            Vector2D predictedPosition = particle.getPosition().multiply(2d).add(particle.getPreviousPosition().multiply(-1d)).add(force.multiply(dt*dt/particle.getMass()));
+            Vector2D predictedVelocity = predictedPosition.add(particle.getPreviousPosition().multiply(-1d)).multiply(1d/(2d*dt));
 
             particle.setFutureState(new State(
-                    x,y,vX,vY
+                    predictedPosition.getX(), predictedPosition.getY(),
+                    predictedVelocity.getX(), predictedVelocity.getY(),
+                    0d,0d
             ));
         }else{
             Vector2D force = forceFunction.getForce(new Vector2D(particle.getX(),particle.getY()), new Vector2D(particle.getvX(), particle.getvY()),neighbors);
