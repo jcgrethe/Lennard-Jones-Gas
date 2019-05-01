@@ -52,13 +52,24 @@ public class Particle {
         this.mass = Double.POSITIVE_INFINITY;
     }
 
-    public Particle(double radius, double mass, double x, double y, double vx, double vy) {
+    public Particle(double radius, double mass, double x, double y, double vx, double vy,double dt) {
+        this.id = serial_id++;
+        this.radius = radius;
+        this.mass = mass;
+        currentState = new State(x, y, vx, vy, 0, 0);
+        double prevX = x - vx * dt;
+        double prevY = y - vy * dt;
+        previousState = new State(prevX, prevY, vx, vy, 0, 0);
+    }
+
+    public Particle(double radius, double mass, double x, double y, double vx, double vy){
         this.id = serial_id++;
         this.radius = radius;
         this.mass = mass;
         currentState = new State(x, y, vx, vy, 0, 0);
         previousState = new State(0, 0, 0, 0, 0, 0);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

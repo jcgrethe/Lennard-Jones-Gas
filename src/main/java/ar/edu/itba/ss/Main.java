@@ -23,24 +23,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
         LennardJonesForce l = new LennardJonesForce(1.0,2.0);
-        Integrator i=null;
-        if(cmd.getOptionValue('b')!= null)
-            i = new Beeman(DEFAULT_DT,l);
-        if(cmd.getOptionValue('g')!= null){
-            if (i==null)
-                i = new GearPredictor(DEFAULT_DT,l);
-            else
-                throw new IllegalArgumentException();
-        }
-        if(cmd.getOptionValue('v')!= null){
-            if (i==null)
-                i = new VelocityVerlet(DEFAULT_DT,l);
-            else
-                throw new IllegalArgumentException();
-        }
         Output.generateXYZFile();
-        if (i==null)
-            i = new Beeman(DEFAULT_DT, l);
+        Integrator i= new VelocityVerlet(DEFAULT_DT,l);
         LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i);
         simulation.simulate(DEFAULT_DT);
     }

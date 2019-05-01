@@ -3,6 +3,7 @@ package ar.edu.itba.ss.LennardJones;
 import ar.edu.itba.ss.models.ForceFunction;
 import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Vector2D;
+import javafx.geometry.Point2D;
 
 import java.util.List;
 
@@ -16,23 +17,16 @@ public class LennardJonesForce implements ForceFunction {
     }
 
     @Override
-    public Vector2D getForce(Vector2D position, Vector2D velocity, List<Particle> neighbors){
-        Double xForce = 0.0, yForce = 0.0, xDistance, yDistance, distanceMod;
-        Double x = position.getX();
-        Double y = position.getY();
-
-        for (Particle p : neighbors){
-            xDistance = p.getX() - x;
-            yDistance = p.getY() - y;
-            distanceMod = Math.sqrt(Math.pow(xDistance,2.0) + Math.pow(yDistance,2.0));
-
-            final Double forceMagnitude = calculateMagnitude(distanceMod);
-            xForce += forceMagnitude* (xDistance/distanceMod);
-            yForce += forceMagnitude* (yDistance/distanceMod);
-//            if(Math.abs(xForce)>50 || Math.abs(yForce)>50 )
-//                System.out.println("error");
+    public Vector2D getForce(Vector2D position, Vector2D velocity, List<Particle> neighbours){
+        Double xForce = 0.0, yForce = 0.0;
+        Point2D pPoint = new Point2D(position.getX(),position.getY());
+        for (Particle neighbour : neighbours) {
+            Point2D nPoint = new Point2D(neighbour.getX(),neighbour.getY());
+            Point2D distance = pPoint.subtract(nPoint);
+            double forceMagnitude = calculateMagnitude(distance.magnitude());
+            xForce += forceMagnitude * (distance.getX()) / distance.magnitude();
+            yForce += forceMagnitude * (distance.getY()) / distance.magnitude();
         }
-
         return new Vector2D(xForce, yForce);
     }
 

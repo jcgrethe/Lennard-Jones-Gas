@@ -28,7 +28,7 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt, Integrator integrator)
     {
-        this.input = new Input(Long.valueOf(1000));
+        this.input = new Input(Long.valueOf(1000),dt);
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
