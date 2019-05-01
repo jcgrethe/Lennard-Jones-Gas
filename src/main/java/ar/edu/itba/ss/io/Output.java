@@ -119,7 +119,7 @@ public class Output {
     public static double potencial(Particle p, List<Particle> neighbors, double rm, double e){
         double acum= 0.0;
         for(Particle n: neighbors){
-            double aux = 4 * e * ( Math.pow(rm/getDistances(p,n),12) - Math.pow(rm/getDistances(p,n),6) );
+            double aux = e * ( Math.pow(rm/getDistances(p,n),12) - 2 * Math.pow(rm/getDistances(p,n),6) );
             acum+= (n.getId()<0)?aux*2:aux;
         }
         return acum;
