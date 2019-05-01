@@ -8,6 +8,7 @@ import ar.edu.itba.ss.models.State;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -25,8 +26,13 @@ public class OsciladorAmortiguadoSimulation {
     public static void simulate()
     {
         Input input = new Input();
-        Double[] dts = {0.00001};
-        List<Double> diferentials = Arrays.asList(dts);
+        List<Double> diferentials = new LinkedList<>();
+//        for (double i = 0.000001 ; i < 0.00001 ; i+=0.0000999){
+            diferentials.add(0.0001);
+//            diferentials.add(0.000001);
+//            diferentials.add(0.0000001);
+
+
         diferentials.sort(Comparator.comparingDouble(Double::doubleValue));
 //        diferentials.sort(Comparator.comparingDouble(Double::doubleValue).reversed());
 
@@ -65,16 +71,13 @@ public class OsciladorAmortiguadoSimulation {
 
     private static double[] oscillation(Integrator integrator, double dt, double endtime, Particle particle, Input input){
         particle = new Particle(0.0, input.getMass(), new State(
-                0.0,input.getInitialX(),0.0,input.getInitialV(),0.0,0.0
+                0.0,input.getInitialX(),0.0,input.getInitialV(),0.0,input.getInitialA()
         ));
-        particle.initializeGPState(
-                particle.getX(), particle.getY(),
-                particle.getvX(), particle.getvY());
         int bins = (int) (endtime/dt);
         double[] positions = new double[bins];
-
-        for (int t=0 ; t < bins ; t++){
-            positions[t] = integrator.unidimensionalNextPosition(particle, dt*t);
+        int t =0;
+        for ( ; t < bins ; t++){
+            positions[t] = integrator.unidimensionalNextPosition(particle, dt*(t+1));
         }
 
         return positions;

@@ -52,22 +52,27 @@ public class Output {
                     );
                     obufferedw.newLine();
                     for (int p=0 ; p < analitycPositions[i].length ; p++){
-                        if (p % 100 == 0){
+//                        if (p % 100 == 0){
                             obufferedw.write(
-                                    analitycPositions[i][p] + "," +
+                                    analitycPositions[i][p] + ","+
                                             beemanPositions[i][p] + "," +
-                                            GearPredictorPositions[i][p] + "," +
+                                            GearPredictorPositions[i][p] + ","+
                                             verletPositions[i][p]
                             );
                             obufferedw.newLine();
-                        }
+//                        }
                     }
                 }catch (IOException e) {
                 }
             }
+            obufferedw.flush();
+            obufferedw.close();
+            ofw.close();
+
         }catch (IOException e) {
         }
     }
+
 
     public static void generateXYZFile(){
         try{

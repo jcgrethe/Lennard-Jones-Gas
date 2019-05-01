@@ -38,6 +38,7 @@ public class Input {
     private final Double M = 70.0;     // In Kilogrames
     private final Double initialX = 1.0;          // In m
     private final Double initialV = -A*y/(2*M);   // In m/s
+    private final Double initialA = (-K*initialX-y*initialV)/M;   // In m/s
     private static Double endTime = 5.0; // In s
 
 
@@ -194,5 +195,8 @@ public class Input {
 
     public Double getInitialX() {
         return initialX;
+    }
+    public Double getInitialA() {
+        return initialA;
     }
 }

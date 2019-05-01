@@ -34,9 +34,17 @@ public class GearPredictor extends Integrator {
     }
     @Override
     public void moveParticle(Particle particle, Double time, List<Particle> neighbors) {
+        GPState gpState;
         if (particle.getGPState().isPresent()){
-            GPState gpState = particle.getGPState().get();
-
+            gpState = particle.getGPState().get();
+        }else {
+            gpState = new GPState(
+                    particle.getPosition(), particle.getVelocity(), particle.getAcceleration(),
+                    new Vector2D(),
+                    new Vector2D(),
+                    new Vector2D()
+            );
+        }
             //Predict
             GPState predictedGPState = new GPState(
                     getR(gpState),
@@ -74,9 +82,6 @@ public class GearPredictor extends Integrator {
             // Finally, update the new state
             newParticleState.changeGPState(correctedGPState);
             particle.setFutureState(newParticleState);
-        }else {
-            throw new IllegalStateException("No GPState founded, could not predict new position.");
-        }
     }
 
     private Vector2D getR(GPState gpState){
