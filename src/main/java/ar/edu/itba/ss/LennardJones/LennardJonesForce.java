@@ -21,7 +21,7 @@ public class LennardJonesForce implements ForceFunction {
         Double xForce = 0.0, yForce = 0.0;
         Point2D pPoint = new Point2D(position.getX(),position.getY());
         for (Particle neighbour : neighbours) {
-            Point2D nPoint = new Point2D(neighbour.getX(),neighbour.getY());
+            Point2D nPoint = neighbour.point2D();
             Point2D distance = pPoint.subtract(nPoint);
             double forceMagnitude = calculateMagnitude(distance.magnitude());
             xForce += forceMagnitude * (distance.getX()) / distance.magnitude();
@@ -30,18 +30,7 @@ public class LennardJonesForce implements ForceFunction {
         return new Vector2D(xForce, yForce);
     }
 
-
-    public Vector2D getForce(Particle particle, List<Particle> neighbors){
-        return getForce(new Vector2D(particle.getX(), particle.getY()), new Vector2D(), neighbors);
-    }
-
-    public Vector2D getForce(Vector2D position, List<Particle> neighbors){
-        Vector2D force = getForce(position, new Vector2D(), neighbors);
-        return new Vector2D(force.getX(), force.getY());
-    }
-
-
     private double calculateMagnitude(final double r) {
-        return 12 * e * (Math.pow(rm / r, 13) - Math.pow(rm / r, 7)) / rm;
+        return ( (12 * e) / rm) * (Math.pow(rm / r, 13) - Math.pow(rm / r, 7)) ;
     }
 }

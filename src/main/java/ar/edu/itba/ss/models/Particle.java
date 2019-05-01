@@ -2,6 +2,7 @@ package ar.edu.itba.ss.models;
 
 import ar.edu.itba.ss.Integrators.GearPredictor;
 
+import java.awt.geom.Point2D;
 import java.util.Optional;
 
 public class Particle {
@@ -158,6 +159,9 @@ public class Particle {
         this.currentState.setY(y);
     }
 
+    public javafx.geometry.Point2D point2D(){
+        return new javafx.geometry.Point2D(getX(),getY());
+    }
 
     public void initializeGPState(Double x, Double y, Double vx, Double vy){
         currentState.setNewGPState(x,y, vx, vy);
