@@ -1,6 +1,7 @@
 package ar.edu.itba.ss.io;
 import ar.edu.itba.ss.models.Particle;
 
+import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class Output {
     private final static String STATISTICS_FILENAME = "statistics_energy_per_unit_of_time.csv";
     private final static String OSCILLATION_RESULTS_FILENAME = "oscillation_results.csv";
     private final static String VELOCITY_NAME = "velocities.csv";
+    private final static String PARTICLE_FILENAME = "statistics_particle_per_unit_of_time.csv";
 
     private static BufferedWriter simulationBufferedWriter;
     private static BufferedWriter energyBufferedWriter;
@@ -132,7 +134,7 @@ public class Output {
         try{
             FileWriter fileWriter = new FileWriter(STATISTICS_FILENAME);
             energyBufferedWriter = new BufferedWriter(fileWriter);
-            energyBufferedWriter.write("time,energy,error");
+            energyBufferedWriter.write("time,energyk,p,total,error");
             energyBufferedWriter.newLine();
             energyBufferedWriter.flush();
         }catch(IOException e){
@@ -160,7 +162,7 @@ public class Output {
             potencialE+=potencial(entry.getKey(),entry.getValue(),input.getRm(),input.getEpsilon());
         }
         double error = energyError(5000, kineticE+potencialE);
-        energyBufferedWriter.write(time+","+(kineticE+potencialE)+","+ error);
+        energyBufferedWriter.write(time+","+kineticE+","+potencialE+","+(kineticE+potencialE)+","+ error);
         energyBufferedWriter.newLine();
         energyBufferedWriter.flush();
     }
@@ -173,7 +175,8 @@ public class Output {
     public static double potencial(Particle p, List<Particle> neighbors, double rm, double e){
         double acum= 0.0;
         for(Particle n: neighbors){
-            double aux = e * ( Math.pow(rm/getDistances(p,n),12) - 2 * Math.pow(rm/getDistances(p,n),6) );
+            double distance = p.point2D().distance(n.point2D());
+            double aux = e * ( Math.pow(rm/distance,12) - 2 * Math.pow(rm/distance,6) );
             acum+= aux;
         }
         return acum;
@@ -188,5 +191,31 @@ public class Output {
     public static double energyError(double analitic, double predicted){
         return Math.pow(analitic - predicted, 2);
     }
+
+    public static void generateParticleStadistics(){
+        try{
+            FileWriter fileWriter = new FileWriter(PARTICLE_FILENAME);
+            energyBufferedWriter = new BufferedWriter(fileWriter);
+            energyBufferedWriter.write("time,particle_in_left");
+            energyBufferedWriter.newLine();
+            energyBufferedWriter.flush();
+        }catch(IOException e){
+            System.out.println(e);
+        }
+    }
+
+    public static int printParticle(List<Particle> particles, double time) throws IOException {
+        int acum=0;
+        for(Particle particle: particles){
+            if(particle.getX()<200)
+                acum++;
+        }
+        energyBufferedWriter.write(time + "," + acum);
+        energyBufferedWriter.newLine();
+        energyBufferedWriter.flush();
+        return acum;
+    }
+
+
 
 }
