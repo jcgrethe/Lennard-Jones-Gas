@@ -76,6 +76,8 @@ public class Output {
     }
 
 
+
+
     public static void generateXYZFile(){
         try{
             FileWriter fileWriter = new FileWriter(SIMULATION_FILENAME);
@@ -100,7 +102,8 @@ public class Output {
                                 + " " + particle.getRadius()
                                 + " " + particle.getMass()
                                 + " " + particle.getaX()
-                                + " " + particle.getaY());
+                                + " " + particle.getaY()
+                                + " " + particle.getCurrentState().getvModule());
                 simulationBufferedWriter.newLine();
             }catch (IOException e){
                 System.out.println(e);
