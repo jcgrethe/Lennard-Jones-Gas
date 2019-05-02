@@ -38,7 +38,7 @@ public class LennardJonesSimulation {
 
     public void simulate(double dt) throws IOException {
 
-        double time = 0;
+        double time = 0.0;
         int iteration = 0;
         List<Particle> particles = input.getParticles();
 
@@ -52,7 +52,7 @@ public class LennardJonesSimulation {
             neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), particle.getValue(), auxtime));
 
             particles.stream().parallel().forEach(Particle::updateState);
-            if (((int)((time % 0.1)*10000)) == 0){
+            if (iteration % 100 == 0){
                 Output.printEnergy(neighbours,input,((int)(time*10))/10.0);
                 System.out.println(time);
                 Output.printToFile(particles);
