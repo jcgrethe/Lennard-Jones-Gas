@@ -13,6 +13,7 @@ public class Output {
     private final static String SIMULATION_FILENAME = "positions.xyz";
     private final static String STATISTICS_FILENAME = "statistics_energy_per_unit_of_time.csv";
     private final static String OSCILLATION_RESULTS_FILENAME = "oscillation_results.csv";
+    private final static String PARTICLE_FILENAME = "statistics_particle_per_unit_of_time.csv";
 
     private static BufferedWriter simulationBufferedWriter;
     private static BufferedWriter energyBufferedWriter;
@@ -159,5 +160,31 @@ public class Output {
     public static double energyError(double analitic, double predicted){
         return Math.pow(analitic - predicted, 2);
     }
+
+    public static void generateParticleStadistics(){
+        try{
+            FileWriter fileWriter = new FileWriter(PARTICLE_FILENAME);
+            energyBufferedWriter = new BufferedWriter(fileWriter);
+            energyBufferedWriter.write("time,particle_in_left");
+            energyBufferedWriter.newLine();
+            energyBufferedWriter.flush();
+        }catch(IOException e){
+            System.out.println(e);
+        }
+    }
+
+    public static int printParticle(List<Particle> particles, double time) throws IOException {
+        int acum=0;
+        for(Particle particle: particles){
+            if(particle.getX()<200)
+                acum++;
+        }
+        energyBufferedWriter.write(time + "," + acum);
+        energyBufferedWriter.newLine();
+        energyBufferedWriter.flush();
+        return acum;
+    }
+
+
 
 }
