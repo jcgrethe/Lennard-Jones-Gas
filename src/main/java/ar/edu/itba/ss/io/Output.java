@@ -12,9 +12,11 @@ public class Output {
     private final static String SIMULATION_FILENAME = "positions.xyz";
     private final static String STATISTICS_FILENAME = "statistics_energy_per_unit_of_time.csv";
     private final static String OSCILLATION_RESULTS_FILENAME = "oscillation_results.csv";
+    private final static String VELOCITY_NAME = "velocities.csv";
 
     private static BufferedWriter simulationBufferedWriter;
     private static BufferedWriter energyBufferedWriter;
+    private static BufferedWriter velocityBufferedWriter;
 
 
     public static void printOscillationsResults(double[][] analitycPositions,
@@ -87,6 +89,20 @@ public class Output {
         }
     }
 
+    public static void printVelocities(List<Particle> particles, Double time) throws IOException {
+        particles.stream().forEach(particle -> {
+            try{
+                velocityBufferedWriter.write(
+                        time.toString() + "," + particle.getCurrentState().getvModule()
+                );
+                velocityBufferedWriter.newLine();
+            }catch (IOException e){
+                System.out.println(e);
+            }
+        });
+        velocityBufferedWriter.flush();
+    }
+
     public static void printToFile(List<Particle> particles) throws IOException {
         simulationBufferedWriter.write(String.valueOf(particles.size()));
         simulationBufferedWriter.newLine();
@@ -119,6 +135,18 @@ public class Output {
             energyBufferedWriter.write("time,energy,error");
             energyBufferedWriter.newLine();
             energyBufferedWriter.flush();
+        }catch(IOException e){
+            System.out.println(e);
+        }
+    }
+
+    public static void generateVelocityStatistics(){
+        try{
+            FileWriter fileWriter = new FileWriter(VELOCITY_NAME);
+            velocityBufferedWriter = new BufferedWriter(fileWriter);
+            velocityBufferedWriter.write("time,velocity");
+            velocityBufferedWriter.newLine();
+            velocityBufferedWriter.flush();
         }catch(IOException e){
             System.out.println(e);
         }

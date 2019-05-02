@@ -25,6 +25,7 @@ public class Main {
         LennardJonesForce l = new LennardJonesForce(1.0,2.0);
         Output.generateXYZFile();
         Output.generateEnergyStadistics();
+        Output.generateVelocityStatistics();
         Integrator i= new VelocityVerlet(DEFAULT_DT,l);
         LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i);
         simulation.simulate(DEFAULT_DT);

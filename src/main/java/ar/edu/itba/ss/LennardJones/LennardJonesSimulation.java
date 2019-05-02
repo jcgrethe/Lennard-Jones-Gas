@@ -57,6 +57,9 @@ public class LennardJonesSimulation {
                 System.out.println(time);
                 Output.printToFile(particles);
             }
+            if (((int)((time % 0.1)*100000)) == 0) {
+                Output.printVelocities(particles, time);
+            }
             time += dt;
             iteration++;
         }
