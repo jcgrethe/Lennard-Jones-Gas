@@ -28,7 +28,7 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt, Integrator integrator)
     {
-        this.input = new Input(Long.valueOf(1000),dt);
+        this.input = new Input(Long.valueOf(150),dt);
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
@@ -43,7 +43,7 @@ public class LennardJonesSimulation {
         List<Particle> particles = input.getParticles();
         int leftParticles=1000;
         long start = System.currentTimeMillis();
-        while (leftParticles>500) {
+        while (leftParticles>75) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid, grid.getUsedCells(), input.getInteractionRadio(), false);
@@ -52,13 +52,15 @@ public class LennardJonesSimulation {
             neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), particle.getValue(), auxtime));
 
             particles.stream().parallel().forEach(Particle::updateState);
-            if (iteration % 10000 == 0){
-                leftParticles = Output.printParticle(particles,((int)(time*10))/10.0);
-                System.out.println(time +" " + leftParticles );
-                Output.printToFile(particles);
-            }
-            if (((int)((time % 0.1)*100000)) == 0) {
+//            if (iteration % 5000 == 0){
+//                leftParticles = Output.printParticle(particles,((int)(time*10))/10.0);
+//                System.out.println(time +" " + leftParticles );
+//                Output.printToFile(particles);
+//            }
+            if (((int)((time % 0.1)*50)) == 0) {
                 Output.printVelocities(particles, time);
+                System.out.println(time);
+                Output.printEnergy(neighbours, input, time);
             }
             time += dt;
             iteration++;

@@ -18,6 +18,7 @@ public class Output {
 
     private static BufferedWriter simulationBufferedWriter;
     private static BufferedWriter energyBufferedWriter;
+    private static BufferedWriter leftbuffer;
     private static BufferedWriter velocityBufferedWriter;
 
 
@@ -130,18 +131,6 @@ public class Output {
         simulationBufferedWriter.flush();
     }
 
-    public static void generateEnergyStadistics(){
-        try{
-            FileWriter fileWriter = new FileWriter(STATISTICS_FILENAME);
-            energyBufferedWriter = new BufferedWriter(fileWriter);
-            energyBufferedWriter.write("time,energyk,p,total,error");
-            energyBufferedWriter.newLine();
-            energyBufferedWriter.flush();
-        }catch(IOException e){
-            System.out.println(e);
-        }
-    }
-
     public static void generateVelocityStatistics(){
         try{
             FileWriter fileWriter = new FileWriter(VELOCITY_NAME);
@@ -149,6 +138,12 @@ public class Output {
             velocityBufferedWriter.write("time,velocity");
             velocityBufferedWriter.newLine();
             velocityBufferedWriter.flush();
+
+            FileWriter fw = new FileWriter(STATISTICS_FILENAME);
+            energyBufferedWriter = new BufferedWriter(fw);
+            energyBufferedWriter.write("time,energyk,p,total,error");
+            energyBufferedWriter.newLine();
+            energyBufferedWriter.flush();
         }catch(IOException e){
             System.out.println(e);
         }
@@ -195,10 +190,10 @@ public class Output {
     public static void generateParticleStadistics(){
         try{
             FileWriter fileWriter = new FileWriter(PARTICLE_FILENAME);
-            energyBufferedWriter = new BufferedWriter(fileWriter);
-            energyBufferedWriter.write("time,particle_in_left");
-            energyBufferedWriter.newLine();
-            energyBufferedWriter.flush();
+            leftbuffer = new BufferedWriter(fileWriter);
+            leftbuffer.write("time,particle_in_left");
+            leftbuffer.newLine();
+            leftbuffer.flush();
         }catch(IOException e){
             System.out.println(e);
         }
@@ -210,9 +205,9 @@ public class Output {
             if(particle.getX()<200)
                 acum++;
         }
-        energyBufferedWriter.write(time + "," + acum);
-        energyBufferedWriter.newLine();
-        energyBufferedWriter.flush();
+        leftbuffer.write(time + "," + acum);
+        leftbuffer.newLine();
+        leftbuffer.flush();
         return acum;
     }
 
