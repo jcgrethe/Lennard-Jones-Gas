@@ -26,9 +26,9 @@ public class LennardJonesSimulation {
     Integrator currentAlgotithm;
     LennardJonesForce lennardJonesForceCalcuator;
 
-    public LennardJonesSimulation(double dt, Integrator integrator)
+    public LennardJonesSimulation(double dt, Integrator integrator, long particles)
     {
-        this.input = new Input(Long.valueOf(150),dt);
+        this.input = new Input(Long.valueOf(particles),dt);
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
         gapStart = (input.getBoxHeight() / 2) - (input.getOrificeLength() / 2);
@@ -41,9 +41,9 @@ public class LennardJonesSimulation {
         double time = 0.0;
         int iteration = 0;
         List<Particle> particles = input.getParticles();
-        int leftParticles=1000;
+        int leftParticles=particles.size();
         long start = System.currentTimeMillis();
-        while (leftParticles>75) {
+        while (leftParticles>input.getParticles().size()/2) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid, grid.getUsedCells(), input.getInteractionRadio(), false);
@@ -52,16 +52,12 @@ public class LennardJonesSimulation {
             neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), particle.getValue(), auxtime));
 
             particles.stream().parallel().forEach(Particle::updateState);
-//            if (iteration % 5000 == 0){
-//                leftParticles = Output.printParticle(particles,((int)(time*10))/10.0);
-//                System.out.println(time +" " + leftParticles );
-//                Output.printToFile(particles);
-//            }
-            if (((int)((time % 0.1)*50)) == 0) {
-                Output.printVelocities(particles, time);
-                System.out.println(time);
-                Output.printEnergy(neighbours, input, time);
+            if (iteration % 500 == 0){
+                leftParticles = Output.printParticle(particles,((int)(time*10))/10.0);
+                System.out.println(time +" " + leftParticles );
+                Output.printToFile(particles);
             }
+
             time += dt;
             iteration++;
         }

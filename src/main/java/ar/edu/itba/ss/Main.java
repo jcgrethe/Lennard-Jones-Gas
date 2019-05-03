@@ -19,16 +19,16 @@ public class Main {
      * @param args  The arguments to manage the program.
      */
     static final double DEFAULT_DT = 0.001;
+    static final long PARTICLES = 1000;
+
 
     public static void main(String[] args) throws IOException {
         CommandLine cmd = getOptions(args);
         LennardJonesForce l = new LennardJonesForce(1.0,2.0);
         Output.generateXYZFile();
-//        Output.generateEnergyStadistics();
-        Output.generateVelocityStatistics();
         Output.generateParticleStadistics();
         Integrator i= new VelocityVerlet(DEFAULT_DT,l);
-        LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i);
+        LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i,PARTICLES);
         simulation.simulate(DEFAULT_DT);
     }
 
