@@ -161,10 +161,7 @@ public class Output {
             kineticE+= kinetic(entry.getKey());
             potencialE+=potencial(entry.getKey(),entry.getValue(),input.getRm(),input.getEpsilon());
         }
-        double error = energyError(5000, kineticE+potencialE);
-        energyBufferedWriter.write(time+","+kineticE+","+potencialE+","+(kineticE+potencialE)+","+ error);
-        energyBufferedWriter.newLine();
-        energyBufferedWriter.flush();
+        System.out.println("energy:" + (potencialE+kineticE));
     }
 
     public static double kinetic(Particle p){

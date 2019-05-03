@@ -56,10 +56,30 @@ public class Input {
         this.ParticlesQuantity = quantity;
         this.particles = new ArrayList<>();
 
-        for (int p = 0 ; p < ParticlesQuantity ; p++ ){
+        for (int p = 0 ; p < 558 ; p++ ){
             Double x,y,vX,vY;
             do{
                 x =  ThreadLocalRandom.current().nextDouble(r, boxHeight-r);
+                y =  ThreadLocalRandom.current().nextDouble(r, boxHeight-r);
+                double random = 2 * Math.PI * Math.random();
+                vX = defaultVelocity*Math.cos(random);
+                vY = defaultVelocity*Math.sin(random);
+            }while(!noOverlapParticle(x,y));
+            this.particles.add(new Particle(
+                    ParticleRadio,
+                    ParticleMass,
+                    x,
+                    y,
+                    vX,
+                    vY,
+                    dt
+            ));
+        }
+
+        for (int p = 0 ; p < (1000-558) ; p++ ){
+            Double x,y,vX,vY;
+            do{
+                x =  ThreadLocalRandom.current().nextDouble(200+r, 400-r);
                 y =  ThreadLocalRandom.current().nextDouble(r, boxHeight-r);
                 double random = 2 * Math.PI * Math.random();
                 vX = defaultVelocity*Math.cos(random);

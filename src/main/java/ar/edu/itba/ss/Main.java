@@ -21,15 +21,18 @@ public class Main {
     static final double DEFAULT_DT = 0.0001;
 
     public static void main(String[] args) throws IOException {
-        CommandLine cmd = getOptions(args);
         LennardJonesForce l = new LennardJonesForce(1.0,2.0);
+        CommandLine opt = getOptions(args);
+        double dt = DEFAULT_DT;
+        if (!opt.getOptionValue('t').isEmpty())
+            dt= Double.valueOf(opt.getOptionValue('t'));
         Output.generateXYZFile();
         Output.generateEnergyStadistics();
         Output.generateVelocityStatistics();
         Output.generateParticleStadistics();
-        Integrator i= new VelocityVerlet(DEFAULT_DT,l);
-        LennardJonesSimulation simulation = new LennardJonesSimulation(DEFAULT_DT,i);
-        simulation.simulate(DEFAULT_DT);
+        Integrator i= new VelocityVerlet(dt,l);
+        LennardJonesSimulation simulation = new LennardJonesSimulation(dt,i);
+        simulation.simulate(dt);
     }
 
     private static CommandLine getOptions(String[] args){
@@ -37,13 +40,9 @@ public class Main {
 
         Options options = new Options();
 
-        Option beeman = new Option("b", "beeman", false, "beeman");
-        beeman.setRequired(false);
-        options.addOption(beeman);
-
-        Option gear = new Option("g", "gear", false, "gear predictor");
-        gear.setRequired(false);
-        options.addOption(gear);
+        Option time = new Option("t", "dt", true, "dt");
+        time.setRequired(false);
+        options.addOption(time);
 
         Option verlet = new Option("v", "verlet", false, "verlet predictor");
         verlet.setRequired(false);

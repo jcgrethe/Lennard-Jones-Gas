@@ -41,9 +41,9 @@ public class LennardJonesSimulation {
         double time = 0.0;
         int iteration = 0;
         List<Particle> particles = input.getParticles();
-        int leftParticles=1000;
+        int leftParticles=particles.size();
         long start = System.currentTimeMillis();
-        while (leftParticles>500) {
+        while (leftParticles>leftParticles/2) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid, grid.getUsedCells(), input.getInteractionRadio(), false);
@@ -52,12 +52,14 @@ public class LennardJonesSimulation {
             neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), particle.getValue(), auxtime));
 
             particles.stream().parallel().forEach(Particle::updateState);
+
             if (iteration % 10000 == 0){
                 leftParticles = Output.printParticle(particles,((int)(time*10))/10.0);
-                System.out.println(time +" " + leftParticles );
+                System.out.println(time +" " + leftParticles);
+                Output.printEnergy(neighbours,input,time);
                 Output.printToFile(particles);
             }
-            if (((int)((time % 0.1)*100000)) == 0) {
+            if (iteration % 1000000 == 0) {
                 Output.printVelocities(particles, time);
             }
             time += dt;
@@ -68,7 +70,7 @@ public class LennardJonesSimulation {
     }
 
     private void move(Particle p, List<Particle> neighbours, Double time){
-        neighbours = neighbours.stream().filter(n -> !isWallBetween(p, n)).collect(Collectors.toList());
+        neighbours = neighbours.stream().filter(n -> !betWeenWall(p, n)).collect(Collectors.toList());
         addWall(p,neighbours);
         currentAlgotithm.moveParticle(p, time, neighbours); //Update States
     }
@@ -114,9 +116,7 @@ public class LennardJonesSimulation {
 
     }
 
-
-
-    private boolean isWallBetween(Particle p1, Particle p2) {
+    private boolean betWeenWall(Particle p1, Particle p2) {
         double x1= p1.getX();
         double y1= p1.getY();
         double x2= p2.getX();
@@ -126,14 +126,13 @@ public class LennardJonesSimulation {
             return false;
         }
 
-        final double m = (y2 - y1) / (x2 - x1);
-        final double b = y1 - m * x1;
-        final double xp = input.getBoxWidth() / 2;
-        final double yp = m * xp + b;
+        final double distance = (y2 - y1) / (x2 - x1);
+        final double b = y1 - distance * x1;
+        final double xWall = input.getBoxWidth() / 2;
+        final double yp = b + distance * xWall ;
 
-        return yp > gapStart && yp < gapEnd &&
-                ((x1 > input.getBoxWidth() / 2 && x2 < input.getBoxWidth()/ 2) ||
-                        (x1 < input.getBoxWidth() / 2 && x2 > input.getBoxWidth() / 2));
+        return yp > gapStart && yp < gapEnd && ((x1 > input.getBoxWidth() / 2 && x2 < input.getBoxWidth()/ 2) ||
+                                                (x1 < input.getBoxWidth() / 2 && x2 > input.getBoxWidth() / 2));
     }
 
     private boolean notGap(Particle p){
