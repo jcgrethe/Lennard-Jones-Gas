@@ -8,14 +8,12 @@ import ar.edu.itba.ss.models.Particle;
 import ar.edu.itba.ss.models.Wall;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Hello world!
+ * A {@link LennardJonesSimulation} class to manage the simulation itself.
  *
  */
 public class LennardJonesSimulation {
@@ -28,6 +26,7 @@ public class LennardJonesSimulation {
 
     public LennardJonesSimulation(double dt, Integrator integrator)
     {
+        //  input defined       N,              DT
         this.input = new Input(Long.valueOf(150),dt);
         this.lennardJonesForceCalcuator = new LennardJonesForce(input.getRm(), input.getEpsilon());
         this.currentAlgotithm = integrator;
@@ -43,15 +42,23 @@ public class LennardJonesSimulation {
         List<Particle> particles = input.getParticles();
         int leftParticles=1000;
         long start = System.currentTimeMillis();
+
+        // until Fp = 0.5 ; this condition can be while(true)
         while (leftParticles>75) {
             Grid grid = new Grid(input.getCellSideQuantity(), input.getSystemSideLength());
             grid.setParticles(particles);
+            double auxtime = time;
+
+            //Get neighbors for this iteration
             Map<Particle, List<Particle>> neighbours = NeighborDetection.getNeighbors(grid, grid.getUsedCells(), input.getInteractionRadio(), false);
 
-            double auxtime = time;
+            // Predict next state
             neighbours.entrySet().stream().parallel().forEach(particle -> move(particle.getKey(), particle.getValue(), auxtime));
 
+            // Update states
             particles.stream().parallel().forEach(Particle::updateState);
+
+//            Not to print all the iterations
 //            if (iteration % 5000 == 0){
 //                leftParticles = Output.printParticle(particles,((int)(time*10))/10.0);
 //                System.out.println(time +" " + leftParticles );
@@ -65,6 +72,7 @@ public class LennardJonesSimulation {
             time += dt;
             iteration++;
         }
+
         System.out.println(System.currentTimeMillis() - start);
 
     }

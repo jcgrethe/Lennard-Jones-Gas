@@ -27,13 +27,12 @@ public class OsciladorAmortiguadoSimulation {
     {
         Input input = new Input();
         List<Double> diferentials = new LinkedList<>();
-//        for (double i = 0.000001 ; i < 0.00001 ; i+=0.0000999){
-            diferentials.add(0.0001);
-//            diferentials.add(0.000001);
-//            diferentials.add(0.0000001);
 
+//        Diferentials analyzed
+        diferentials.add(0.0001);
 
-        diferentials.sort(Comparator.comparingDouble(Double::doubleValue));
+//        Diferentials Sorted
+//        diferentials.sort(Comparator.comparingDouble(Double::doubleValue));
 //        diferentials.sort(Comparator.comparingDouble(Double::doubleValue).reversed());
 
         double[] beenmanError = new double[diferentials.size()];
@@ -49,15 +48,19 @@ public class OsciladorAmortiguadoSimulation {
         for (double diferential_t : diferentials){
             int index = diferentials.indexOf(diferential_t);
 
+            // Calculate positions, by dt
             analitycPositions[index] = oscillation(new Analityc(diferential_t, oscillatorForce, input.getA(), input.getK(), input.getY()), diferential_t, input.getEndTime(), particle, input);
             beenmanPositions[index] = oscillation(new Beeman(diferential_t, oscillatorForce), diferential_t, input.getEndTime(), particle, input);
             gearPredictorPositions[index] = oscillation(new GearPredictor(diferential_t, oscillatorForce), diferential_t, input.getEndTime(), particle, input);
             verletPositions[index] = oscillation(new VelocityVerlet(diferential_t, oscillatorForce), diferential_t, input.getEndTime(), particle, input);
 
+            // Calculate MSE, by dt
             beenmanError[index] = meanSquaredError(analitycPositions[index], beenmanPositions[index]);
             gearPredictorError[index] = meanSquaredError(analitycPositions[index], gearPredictorPositions[index]);
             verletError[index] = meanSquaredError(analitycPositions[index], verletPositions[index]);
         }
+
+        // Print results
         Output.printOscillationsResults(analitycPositions,beenmanPositions,gearPredictorPositions,verletPositions,beenmanError,gearPredictorError,verletError,diferentials);
     }
 
@@ -69,6 +72,12 @@ public class OsciladorAmortiguadoSimulation {
         return sum/one.length;
     }
 
+
+    /**
+     * Core oscillation method for one given integrator and dt
+     *
+     * @return an array of positions. (one dimension)
+     */
     private static double[] oscillation(Integrator integrator, double dt, double endtime, Particle particle, Input input){
         particle = new Particle(0.0, input.getMass(), new State(
                 0.0,input.getInitialX(),0.0,input.getInitialV(),0.0,input.getInitialA()
